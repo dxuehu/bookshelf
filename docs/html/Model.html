@@ -1,0 +1,2984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Model</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: Model</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+        Model
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    <h4 class="name" id="Model"><span class="type-signature"></span>new Model<span class="signature">(attributes, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>When creating an instance of a model, you can pass in the initial values of
+the attributes, which will be <code>set</code> on the
+model. If you define an <code>initialize</code> function, it will be invoked
+when the model is created.</p>
+<pre class="prettyprint source"><code>new Book({
+  title: &quot;One Thousand and One Nights&quot;,
+  author: &quot;Scheherazade&quot;
+});</code></pre><p>In rare cases, if you're looking to get fancy, you may want to override
+<code>constructor</code>, which allows you to replace the
+actual constructor function for your model.</p>
+<pre class="prettyprint source"><code>var Books = bookshelf.Model.extend({
+
+  tableName: 'documents',
+
+  constructor: function() {
+    bookshelf.Model.apply(this, arguments);
+    this.on('saving', function(model, attrs, options) {
+      options.query.where('type', '=', 'book');
+    });
+  }
+
+});</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attributes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Initial values for this model's attributes.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Hash of options.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>tableName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Initial value for <a href="Model.html#tableName"><code>tableName</code></a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hasTimestamps</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Initial value for <code>hasTimestamps</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>parse</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Convert attributes by <code>parse</code> before being
+  <code>set</code> on the model.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line59">line 59</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>ModelBase</li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="idAttribute"><span class="type-signature"></span>idAttribute<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    <p>This tells the model which attribute to expect as the unique identifier
+for each database row (typically an auto-incrementing primary key named
+<code>&quot;id&quot;</code>). Note that if you are using <code>parse</code> and <code>format</code> (to have your model's attributes in <code>camelCase</code>,
+but your database's columns in <code>snake_case</code>, for example) this refers to
+the name returned by parse (<code>myId</code>), not the database column (<code>my_id</code>).</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line73">line 73</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="tableName"><span class="type-signature"></span>tableName<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    <p>A required property for any database usage, The
+<a href="Model.html#tableName"><code>tableName</code></a> property refers to the database
+table name the model will query against.</p>
+<pre class="prettyprint source"><code>var Television = bookshelf.Model.extend({
+  tableName: 'televisions'
+});</code></pre>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line61">line 61</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="belongsTo"><span class="type-signature"></span>belongsTo<span class="signature">(Target, foreignKey<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>The <code>belongsTo</code> relationship is used when a model is a member of
+another <code>Target</code> model.</p>
+<p>It can be used in a <code>one-to-one</code> associations as the inverse
+of a <a href="Model.html#hasOne"><code>hasOne</code></a>. It can also used in <code>one-to-many</code> associations as the inverse of a <code>hasMany</code> (and is the one side of that association).
+In both cases, the belongsTo relationship is used for a model that is a
+member of another Target model, referenced by the foreignKey in the current
+model.</p>
+<pre class="prettyprint source"><code>var Book = bookshelf.Model.extend({
+  tableName: 'books',
+  author: function() {
+    return this.belongsTo(Author);
+  }
+});
+
+// select * from `books` where id = 1
+// select * from `authors` where id = book.author_id
+Book.where({id: 1}).fetch({withRelated: ['author']}).then(function(book) {
+  console.log(JSON.stringify(book.related('author')));
+});</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Constructor of <a href="Model.html"><code>Model</code></a> targeted by join.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>foreignKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>ForeignKey in this model. By default, the foreignKey is assumed to
+  be the singular form of the <code>Target</code> model's tableName, followed by <code>_id</code> /
+  <code>_{{idAttribute}}</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line150">line 150</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="belongsToMany"><span class="type-signature"></span>belongsToMany<span class="signature">(Target, foreignKey<span class="signature-attributes">opt</span>, table<span class="signature-attributes">opt</span>, otherKey<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Collection}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Defines a many-to-many relation, where the current model is joined to one
+or more of a <code>Target</code> model through another table. The default name for
+the joining table is the two table names, joined by an underscore, ordered
+alphabetically. For example, a <code>users</code> table and an <code>accounts</code> table would have
+a joining table of accounts_users.</p>
+<pre class="prettyprint source"><code>var Account = bookshelf.Model.extend({
+  tableName: 'accounts'
+});
+
+var User = bookshelf.Model.extend({
+
+  tableName: 'users',
+
+  allAccounts: function () {
+    return this.belongsToMany(Account);
+  },
+
+  adminAccounts: function() {
+    return this.belongsToMany(Account).query({where: {access: 'admin'}});
+  },
+
+  viewAccounts: function() {
+    return this.belongsToMany(Account).query({where: {access: 'readonly'}});
+  }
+
+});  </code></pre><p> The default key names in the joining table are the singular versions of the
+ model table names, followed by <code>_id</code> /
+ _{{<a href="Model.html#idAttribute"><code>idAttribute</code></a>}}. So in the above case, the
+ columns in the joining table
+ would be <code>user_id</code>, <code>account_id</code>, and <code>access</code>, which is used as an
+ example of how dynamic relations can be formed using different contexts.
+ To customize the keys used in, or the <a href="Model.html#tableName"><code>tableName</code></a>
+ used for the join table, you may specify them like so:</p>
+<pre class="prettyprint source"><code> this.belongsToMany(Account, 'users_accounts', 'userid', 'accountid');</code></pre><p>If you wish to create a <a href="Model.html#belongsToMany"><code>belongsToMany</code></a>
+association where the joining table has a primary key, and more information
+about the model, you may create a <a href="Model.html#belongsToMany"><code>belongsToMany</code></a>
+<code>through</code> relation:</p>
+<pre class="prettyprint source"><code>var Doctor = bookshelf.Model.extend({
+
+  patients: function() {
+    return this.belongsToMany(Patient).through(Appointment);
+  }
+
+});
+
+var Appointment = bookshelf.Model.extend({
+
+  patient: function() {
+    return this.belongsTo(Patient);
+  },
+
+  doctor: function() {
+    return this.belongsTo(Doctor);
+  }
+
+});
+
+var Patient = bookshelf.Model.extend({
+
+  doctors: function() {
+    return this.belongsToMany(Doctor).through(Appointment);
+  }
+
+});</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Constructor of <a href="Model.html"><code>Model</code></a> targeted by join.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>foreignKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Foreign key in this model. By default, the <code>foreignKey</code> is assumed to
+  be the singular form of the <code>Target</code> model's tableName, followed by <code>_id</code> /
+  <code>_{{idAttribute}}</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>table</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Name of the joining table. Defaults to the two table names, joined by an
+  underscore, ordered alphabetically.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>otherKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Foreign key in the <code>Target</code> model. By default, the <code>otherKey</code> is assumed to
+  be the singular form of this model's tableName, followed by <code>_id</code> /
+  <code>_{{idAttribute}}</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line193">line 193</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Collection</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="fetch"><span class="type-signature"></span>fetch<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Fetches a <a href="Model.html"><code>model</code></a> from the database, using any <code>attributes</code> currently set on the model to form a <code>select</code>
+query. Returns a <code>promise</code>, which will resolve with the
+fetched <a href="Model.html"><code>model</code></a>, or <code>undefined</code> if the model isn't fetched. A
+<code>&quot;fetching&quot;</code> event will be fired just before the record is fetched; a good
+place to hook into for validation. A <code>&quot;fetched&quot;</code> event will be fired when
+a record is successfully retrieved. If you need to constrain the query
+performed by fetch, you can call <code>query</code> before calling
+<a href="Model.html#fetch"><code>fetch</code></a>.  </p>
+<pre class="prettyprint source"><code>// select * from `books` where `ISBN-13` = '9780440180296'
+new Book({'ISBN-13': '9780440180296'})
+  .fetch()
+  .then(function(model) {
+    // outputs 'Slaughterhouse Five'
+    console.log(model.get('title'));
+  });</code></pre><p><em>If you'd like to only fetch specific columns, you may specify a <code>columns</code>
+property in the <code>options</code> for the <a href="Model.html#fetch"><code>fetch</code></a> call, or use
+<code>query</code>, tapping into the <code>Knex</code> <code>column</code> method to specify which columns will be fetched.</em></p>
+<p>The <code>withRelated</code> parameter may be specified to fetch the resource, along
+with any specified <code>relations</code> named on the model. A
+single property, or an array of properties can be specified as a value for
+the <code>withRelated</code> property. The results of these relation queries will be
+loaded into a <code>relations</code> property on the model, may
+be retrieved with the <code>related</code> method, and will be
+serialized as properties on a <code>toJSON</code> call unless
+<code>{shallow: true}</code> is passed.  </p>
+<pre class="prettyprint source"><code>var Book = bookshelf.Model.extend({
+  tableName: 'books',
+  editions: function() {
+    return this.hasMany(Edition);
+  },
+  genre: function() {
+    return this.belongsTo(Genre);
+  }
+})
+
+new Book({'ISBN-13': '9780440180296'}).fetch({
+  withRelated: ['genre', 'editions']
+}).then(function(book) {
+  console.log(book.related('genre').toJSON());
+  console.log(book.related('editions').toJSON());
+  console.log(book.toJSON());
+});</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Hash of options.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>require</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>If <code>true</code>, will reject the returned response with a <code>NotFoundError</code> if no result is found.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>columns</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    '*'
+                
+                </td>
+            
+
+            <td class="description last"><p>Limit the number of columns fetched.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line523">line 523</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<h5>Fires:</h5>
+<ul>
+    <li>Model#event:fetching fetching</li>
+
+    <li>Model#event:fetched  fetched</li>
+</ul>
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A promise resolving to the fetched <a href="Model.html"><code>model</code></a> or <code>undefined</code>.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="hasMany"><span class="type-signature"></span>hasMany<span class="signature">(Target, foreignKey<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Collection}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>The <code>hasMany</code> relation specifies that this model has one or more rows in
+another table which match on this model's primary key.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Constructor of <a href="Model.html"><code>Model</code></a> targeted by join.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>foreignKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>ForeignKey in the <code>Target</code> model. By default, the foreignKey is assumed to
+  be the singular form of this model's tableName, followed by <code>_id</code> /
+  <code>_{{idAttribute}}</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line128">line 128</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Collection</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="hasOne"><span class="type-signature"></span>hasOne<span class="signature">(Target, foreignKey<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>The <code>hasOne</code> relation specifies that this table has exactly one of another
+type of object, specified by a foreign key in the other table.</p>
+<pre class="prettyprint source"><code>var Record = bookshelf.Model.extend({
+  tableName: 'health_records'
+});
+
+var Patient = bookshelf.Model.extend({
+  tableName: 'patients',
+  record: function() {
+    return this.hasOne(Record);
+  }
+});
+
+// select * from `health_records` where `patient_id` = 1;
+new Patient({id: 1}).related('record').fetch().then(function(model) {
+  ...
+}); 
+
+// alternatively, if you don't need the relation loaded on the patient's relations hash:
+new Patient({id: 1}).record().fetch().then(function(model) {
+  ...
+});</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Constructor of <a href="Model.html"><code>Model</code></a> targeted by join.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>foreignKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>ForeignKey in the <code>Target</code> model. By default, the <code>foreignKey</code> is assumed to
+  be the singular form of this model's <a href="Model.html#tableName"><code>tableName</code></a>,
+  followed by <code>_id</code> / <code>_{{<a href="Model.html#idAttribute"><code>idAttribute</code></a>}}</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line84">line 84</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="morphMany"><span class="type-signature"></span>morphMany<span class="signature">(Target, name<span class="signature-attributes">opt</span>, columnNames<span class="signature-attributes">opt</span>, morphValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Collection}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p><a href="Model.html#morphMany"><code>morphMany</code></a> is essentially the same as a <a href="Model.html#morphOne"><code>morphOne</code></a>, but creating a <code>collection</code>
+rather than a <a href="Model.html"><code>model</code></a> (similar to a <a href="Model.html#hasOne"><code>hasOne</code></a> vs. <a href="Model.html#hasMany"><code>hasMany</code></a> relation).</p>
+<p><a href="Model.html#morphMany"><code>morphMany</code></a> is used to signify a <code>one-to-many</code> or <code>many-to-many</code> <code>polymorphic relation</code> with another <code>Target</code> model, where the <code>name</code> of the
+model is used to determine which database table keys are used. The naming
+convention requires the <code>name</code> prefix an <code>_id</code> and <code>_type</code> field in the
+database. So for the case below the table names would be <code>imageable_type</code>
+and <code>imageable_id</code>. The <code>morphValue</code> may be optionally set to
+store/retrieve a different value in the <code>_type</code> column than the <code>Target</code>'s
+<a href="Model.html#tableName"><code>tableName</code></a>.</p>
+<pre class="prettyprint source"><code>var Post = bookshelf.Model.extend({
+  tableName: 'posts',
+  photos: function() {
+    return this.morphMany(Photo, 'imageable');
+  }
+});</code></pre><p>And with custom columnNames:</p>
+<pre class="prettyprint source"><code>var Post = bookshelf.Model.extend({
+  tableName: 'posts',
+  photos: function() {
+    return this.morphMany(Photo, 'imageable', [&quot;ImageableType&quot;, &quot;ImageableId&quot;]);
+  }
+});</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Constructor of <a href="Model.html"><code>Model</code></a> targeted by join.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Prefix for <code>_id</code> and <code>_type</code> columns.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>columnNames</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Array containing two column names, the first is the <code>_type</code>, the second is the <code>_id</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>morphValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    Target#<a href="Model.html#tableName"><code>tablename</code></a>
+                
+                </td>
+            
+
+            <td class="description last"><p>The string value associated with this relationship. Stored in the <code>_type</code>
+  column of the polymorphic table. Defaults to <code>Target</code>#<a href="Model.html#tableName"><code>  tablename</code></a>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line348">line 348</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A collection of related models.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Collection</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="morphOne"><span class="type-signature"></span>morphOne<span class="signature">(Target, name<span class="signature-attributes">opt</span>, columnNames<span class="signature-attributes">opt</span>, morphValue<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>The <a href="Model.html#morphOne"><code>morphOne</code></a> is used to signify a <code>one-to-one</code> <code>polymorphic relation</code> with
+another <code>Target</code> model, where the <code>name</code> of the model is used to determine
+which database table keys are used. The naming convention requires the
+<code>name</code> prefix an <code>_id</code> and <code>_type</code> field in the database. So for the case
+below the table names would be <code>imageable_type</code> and <code>imageable_id</code>. The
+<code>morphValue</code> may be optionally set to store/retrieve a different value in
+the <code>_type</code> column than the <a href="Model.html#tableName"><code>Model#tableName</code></a>.</p>
+<pre class="prettyprint source"><code>var Site = bookshelf.Model.extend({
+  tableName: 'sites',
+  photo: function() {
+    return this.morphOne(Photo, 'imageable');
+  }
+});</code></pre><p>And with custom <code>columnNames</code>:</p>
+<pre class="prettyprint source"><code>var Site = bookshelf.Model.extend({
+  tableName: 'sites',
+  photo: function() {
+    return this.morphOne(Photo, 'imageable', [&quot;ImageableType&quot;, &quot;ImageableId&quot;]);
+  }
+});</code></pre><p>Note that both <code>columnNames</code> and <code>morphValue</code> are optional arguments. How
+your argument is treated when only one is specified, depends on the type.
+If your argument is an array, it will be assumed to contain custom
+<code>columnNames</code>. If it's not, it will be assumed to indicate a <code>morphValue</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Constructor of <a href="Model.html"><code>Model</code></a> targeted by join.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Prefix for <code>_id</code> and <code>_type</code> columns.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>columnNames</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Array containing two column names, the first is the <code>_type</code>, the second is the <code>_id</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>morphValue</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    Target#<a href="Model.html#tableName"><code>tablename</code></a>
+                
+                </td>
+            
+
+            <td class="description last"><p>The string value associated with this relationship. Stored in the <code>_type</code>
+  column of the polymorphic table. Defaults to <code>Target</code>#<a href="Model.html#tableName"><code>  tablename</code></a>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line297">line 297</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The related model.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="morphTo"><span class="type-signature"></span>morphTo<span class="signature">(name, columnNames<span class="signature-attributes">opt</span>, &hellip;Target)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>The <a href="Model.html#morphTo"><code>morphTo</code></a> relation is used to specify the inverse
+of the <a href="Model.html#morphOne"><code>morphOne</code></a> or <a href="Model.html#morphMany"><code>morphMany</code></a> relations, where the <code>targets</code> must be passed to signify which
+<a href="Model.html"><code>models</code></a> are the potential opposite end of the <code>polymorphic relation</code>.</p>
+<pre class="prettyprint source"><code>var Photo = bookshelf.Model.extend({
+  tableName: 'photos',
+  imageable: function() {
+    return this.morphTo('imageable', Site, Post);
+  }
+});</code></pre><p>And with custom columnNames:</p>
+<pre class="prettyprint source"><code>var Photo = bookshelf.Model.extend({
+  tableName: 'photos',
+  imageable: function() {
+    return this.morphTo('imageable', [&quot;ImageableType&quot;, &quot;ImageableId&quot;], Site, Post);
+  }
+});</code></pre>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Prefix for <code>_id</code> and <code>_type</code> columns.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>columnNames</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Array containing two column names, the first is the <code>_type</code>, the second is the <code>_id</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>Target</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                    &lt;repeatable><br>
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Constructor of <a href="Model.html"><code>Model</code></a> targeted by join.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line400">line 400</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="through"><span class="type-signature"></span>through<span class="signature">(Interim, throughForeignKey<span class="signature-attributes">opt</span>, otherKey<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Collection}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Helps to create dynamic relations between <a href="Model.html"><code>models</code></a> and <code>collections</code>, where a <a href="Model.html#hasOne"><code>hasOne</code></a>, <a href="Model.html#hasMany"><code>hasMany</code></a>, <a href="Model.html#belongsTo"><code>belongsTo</code></a>, or <a href="Model.html#belongsToMany"><code>belongsToMany</code></a> relation may run through a <code>JoinModel</code>.  </p>
+<p>A good example of where this would be useful is if a book <a href="Model.html#hasMany"><code>hasMany</code></a> paragraphs through chapters. Consider the following examples:</p>
+<pre class="prettyprint source"><code>var Book = bookshelf.Model.extend({
+
+  tableName: 'books',
+
+  // Find all paragraphs associated with this book, by
+  // passing through the &quot;Chapter&quot; model.
+  paragraphs: function() {
+    return this.hasMany(Paragraph).through(Chapter);
+  },
+
+  chapters: function() {
+    return this.hasMany(Chapter);
+  }
+
+});
+
+var Chapter = bookshelf.Model.extend({
+
+  tableName: 'chapters',
+
+  paragraphs: function() {
+    return this.hasMany(Paragraph);
+  }
+
+});
+
+var Paragraph = bookshelf.Model.extend({
+
+  tableName: 'paragraphs',
+
+  chapter: function() {
+    return this.belongsTo(Chapter);
+  },
+
+  // A reverse relation, where we can get the book from the chapter.
+  book: function() {
+    return this.belongsTo(Book).through(Chapter);
+  }
+
+});</code></pre><p>The &quot;through&quot; table creates a pivot model, which it assigns to <code>model.pivot</code> after it is created. On <code>toJSON</code>, the pivot model is flattened to values prefixed with
+<code>_pivot_</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Interim</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Pivot model.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>throughForeignKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Foreign key in this model. By default, the <code>foreignKey</code> is assumed to
+  be the singular form of the <code>Target</code> model's tableName, followed by <code>_id</code> /
+  <code>_{{idAttribute}}</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>otherKey</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Foreign key in the <code>Interim</code> model. By default, the <code>otherKey</code> is assumed to
+  be the singular form of this model's tableName, followed by <code>_id</code> /
+  <code>_{{idAttribute}}</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line447">line 447</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Collection</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Externals</h3><ul><li><a href="external-Knex.html">Knex</a></li><li><a href="external-Promise.html">Promise</a></li></ul><h3>Classes</h3><ul><li><a href="Model.html">Model</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.1</a> on Sat Jun 13 2015 12:34:52 GMT+1000 (AEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
