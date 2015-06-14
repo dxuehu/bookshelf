@@ -5,7 +5,7 @@
  * For all details and documentation:
  * http://bookshelfjs.org
  *
- * @name Bookshelf.js
+ * @module Bookshelf
  * @version 0.8.1
  * @license MIT
  *
