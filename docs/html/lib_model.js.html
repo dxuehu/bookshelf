@@ -551,11 +551,14 @@ var BookshelfModel = ModelBase.extend({
   /**
    * Fetches a {@link Model model} from the database, using any {@link
    * Model#attributes attributes} currently set on the model to form a `select`
-   * query. Returns a {@link Promise promise}, which will resolve with the
-   * fetched {@link Model model}, or `undefined` if the model isn't fetched. A
-   * `"fetching"` event will be fired just before the record is fetched; a good
-   * place to hook into for validation. A `"fetched"` event will be fired when
-   * a record is successfully retrieved. If you need to constrain the query
+   * query. 
+   *
+   * A {@link Model#fetching "fetching"} event will be fired just before the
+   * record is fetched; a good place to hook into for validation. A {@link
+   * Model#fetched "fetched"} event will be fired when a record is successfully
+   * retrieved.
+   *
+   * If you need to constrain the query
    * performed by fetch, you can call {@link Model#query query} before calling
    * {@link Model#fetch fetch}.  
    *
@@ -611,10 +614,17 @@ var BookshelfModel = ModelBase.extend({
    *
    *   Limit the number of columns fetched.
    *
+   * @param {Transaction=} options.transacting
+   *
+   *  Optionally run the query in a transaction.
+   *
    * @fires Model#fetching
    * @fires Model#fetched 
    *
-   * @returns {Promise} A promise resolving to the fetched {@link Model model} or `undefined`.
+   * @returns {Promise&lt;Model|undefined>}
+   *
+   *  A promise resolving to the fetched {@link Model model} or `undefined` if none exists.
+   *
    */
   fetch: Promise.method(function(options) {
     options = options ? _.clone(options) : {};
@@ -655,7 +665,44 @@ var BookshelfModel = ModelBase.extend({
       });
   }),
 
-  // Shortcut for creating a collection and fetching the associated models.
+  /**
+   * Fetches a collection of {@link Model models} from the database, using any
+   * query parameters currently set on the model to form a select query. Returns
+   * a promise, which will resolve with the fetched collection. If you wish to
+   * trigger an error if no models are found, pass {require: true} as one of
+   * the options to the `fetchAll` call.
+   *
+   * A {@link Model#fetching "fetching"} event will be  A
+   *
+   * If you need to constrain the query performed by fetch, you can call the
+   * {@link Model#query query} method before calling fetch.
+   *
+   * @method Model#fetchAll
+   *
+   * @param {Object=}  options - Hash of options.
+   * @param {boolean=} [options.require=false]
+   *
+   *  Rejects the returned promise with an `EmptyError` if no records are returned.
+   *
+   * @param {Transaction=} options.transacting
+   *
+   *   Optionally run the query in a transaction.
+   *
+   * @fires Model#"fetching:collection"
+   *
+   *   Fired just before the {@link Collection} is fetched; a good place to hook into for validations.
+   *
+   * @fires Model#"fetched:collection"
+   *
+   *   Fired when a record is successfully retrieved.
+   *
+   * @throws {Bookshelf.EmptyError}
+   *
+   *  Rejects the promise in the event of an empty response if the `require: true` option.
+   *
+   * @returns {Promise} A promise resolving to the fetched {@link Collection collection}.
+   *
+   */
   fetchAll: function(options) {
     var collection = this.constructor.collection();
     collection._knex = this.query().clone();
@@ -672,7 +719,39 @@ var BookshelfModel = ModelBase.extend({
       .fetch(options);
   },
 
-  // Eager loads relationships onto an already populated `Model` instance.
+  /**
+   * The load method takes an array of relations to eager load attributes onto a
+   * {@link Model}, in a similar way that the `withRelated` property works on
+   * {@link Model#fetch fetch}. Dot separated attributes may be used to specify deep
+   * eager loading.
+   *
+   *    new Posts().fetch().then(function(collection) {
+   *      collection.at(0)
+   *      .load(['author', 'content', 'comments.tags'])
+   *      .then(function(model) {
+   *        JSON.stringify(model);
+   *      });
+   *    });
+   *    
+   *    {
+   *      title: 'post title',
+   *      author: {...},
+   *      content: {...},
+   *      comments: [
+   *        {tags: [...]}, {tags: [...]}
+   *      ]
+   *    }
+   *
+   *  @method Model#load
+   *  
+   *  @param {string|string[]}      The relation, or relations, to be loaded.
+   *  @param {Object=}      options Hash of options.
+   *  @param {Transaction=} options.transacting
+   *
+   *    Optionally run the query in a transaction.
+   *
+   *  @returns {Model}          Self, this method is chainable.
+   */
   load: Promise.method(function(relations, options) {
     return Promise.bind(this)
       .then(function() {
@@ -687,10 +766,71 @@ var BookshelfModel = ModelBase.extend({
       .return(this);
   }),
 
-  // Sets and saves the hash of model attributes, triggering
-  // a "creating" or "updating" event on the model, as well as a "saving" event,
-  // to bind listeners for any necessary validation, logging, etc.
-  // If an error is thrown during these events, the model will not be saved.
+  /**
+   * `save` is used to perform either an insert or update query using the
+   * model's set {@link Model#attributes attributes}.
+   *
+   * If the model {@link Model#isNew isNew}, any {@link Model#defaults defaults}
+   * will be set and an `insert` query will be performed. Otherwise it will
+   * `update` the record with a corresponding ID. This behaviour can be overriden
+   * with the `method` option.
+   *
+   *    new Post({name: 'New Article'}).save().then(function(model) {
+   *      // ...
+   *    });
+   *
+   * If you only wish to update with the params passed to the save, you may pass
+   * a {patch: true} flag to the database:
+   *
+   *    // update authors set "bio" = 'Short user bio' where "id" = 1
+   *    new Author({id: 1, first_name: 'User'})
+   *      .save({bio: 'Short user bio'}, {patch: true})
+   *      .then(function(model) {
+   *        // ...
+   *      });
+   *
+   * Several events fired on the model when saving: a {@link Model#creating
+   * "creating"}, or {@link Model#updating "updating"} event if the model is
+   * being inserted or updated, and a "saving" event in either case. To
+   * prevent saving the model (with validation, etc.), throwing an error inside
+   * one of these event listeners will stop saving the model and reject the
+   * promise. A {@link Model#created "created"}, or {@link Model#"updated"}
+   * event is fired after the model is saved, as well as a {@link Model#saved
+   * "saved"} event either way. If you wish to modify the query when the {@link
+   * Model#saving "saving"} event is fired, the knex query object should is
+   * available in `options.query`.
+   *
+   * @example
+   *
+   *     // Save with no arguments
+   *     Model.forge({id: 5, firstName: "John", lastName: "Smith"}).save().then(function() { //...
+   *
+   *     // Or add attributes during save
+   *     Model.forge({id: 5}).save({firstName: "John", latName: "Smith"}).then(function() { //...
+   *
+   *     // Or, if you prefer, for a single attribute
+   *     Model.forge({id: 5}).save('name', 'John Smith').then(function() { //...
+   *
+   * @method Model#save
+   *
+   * @param {string=}      key                      Attribute name.
+   * @param {string=}      val                      Attribute value.
+   * @param {Object=}      attrs                    A has of attributes.
+   * @param {Object=}      options                  Hash of options.
+   * @param {Transaction=} options.transacting      Optionally run the query in a transaction.
+   * @param {string=}      options.method           Explicitly select a save method, either `"update"` or `"insert"`.
+   * @param {string=}      [options.defaults=false] Assign {@link Model#defaults defaults} in an `update` operation.
+   * @param {string=}      options.patch            Explicitly select a save method.
+   *
+   * @fires Model#saving   Fired before performing either an `insert` or `update`.
+   * @fires Model#creating Fired before performing an `insert`.
+   * @fires Model#updating Fired before performing an `update`.
+   * @fires Model#created  Fired after performing an `insert`.
+   * @fires Model#updated  Fired after performing an `update`.
+   * @fires Model#saved    Fired after performing either an `insert` or `update`.
+   *
+   * @returns {Promise} A promise resolving to the saved and updated model.
+   */
   save: Promise.method(function(key, val, options) {
     var attrs;
 
@@ -739,6 +879,50 @@ var BookshelfModel = ModelBase.extend({
       var sync = this.sync(options);
       options.query = sync.query;
 
+      /**
+       * Saving event.
+       *
+       * Fired before an `insert` or `update` query. A promise may be
+       * returned from the event handler for async behaviour. Throwing an
+       * exception from the handler will cancel the save.
+       *
+       * @event Bookshelf#Model#saving
+       * @type {function}
+       * @param {Model}  model    The model firing the event.
+       * @param {Object} attrs    Model firing the event.
+       * @param {Object} options  Options object passed to {@link Model#save save}.
+       * @returns {Promise}
+       */
+
+      /**
+       * Creating event.
+       *
+       * Fired before `insert` query. A promise may be
+       * returned from the event handler for async behaviour. Throwing an
+       * exception from the handler will cancel the save operation.
+       *
+       * @event Bookshelf#Model#creating
+       * @type {function}
+       * @param {Model}  model    The model firing the event.
+       * @param {Object} attrs    Model firing the event.
+       * @param {Object} options  Options object passed to {@link Model#save save}.
+       * @returns {Promise}
+       */
+
+      /**
+       * Updating event.
+       *
+       * Fired before `update` query. A promise may be
+       * returned from the event handler for async behaviour. Throwing an
+       * exception from the handler will cancel the save operation.
+       *
+       * @event Bookshelf#Model#updating
+       * @type {function}
+       * @param {Model}  model    The model firing the event.
+       * @param {Object} attrs    Model firing the event.
+       * @param {Object} options  Options object passed to {@link Model#save save}.
+       * @returns {Promise}
+       */
       return this.triggerThen((method === 'insert' ? 'creating saving' : 'updating saving'), this, attrs, options)
       .bind(this)
       .then(function() {
@@ -761,21 +945,91 @@ var BookshelfModel = ModelBase.extend({
 
         this._reset();
 
+        /**
+         * Saved event.
+         *
+         * Fired before after an `insert` or `update` query.
+         *
+         * @event Bookshelf#Model#saved
+         * @type {function}
+         * @param {Model}  model    The model firing the event.
+         * @param {Object} resp     The database response.
+         * @param {Object} options  Options object passed to {@link Model#save save}.
+         * @returns {Promise}
+         */
+
+        /**
+         * Created event.
+         *
+         * Fired before after an `insert` query.
+         *
+         * @event Bookshelf#Model#created
+         * @type {function}
+         * @param {Model}  model    The model firing the event.
+         * @param {Object} attrs    Model firing the event.
+         * @param {Object} options  Options object passed to {@link Model#save save}.
+         * @returns {Promise}
+         */
+
+        /**
+         * Updated event.
+         *
+         * Fired before after an `update` query.
+         *
+         * @event Bookshelf#Model#updated
+         * @type {function}
+         * @param {Model}  model    The model firing the event.
+         * @param {Object} attrs    Model firing the event.
+         * @param {Object} options  Options object passed to {@link Model#save save}.
+         * @returns {Promise}
+         */
         return this.triggerThen((method === 'insert' ? 'created saved' : 'updated saved'), this, resp, options);
       });
     })
     .return(this);
   }),
 
-  // Destroy a model, calling a "delete" based on its `idAttribute`.
-  // A "destroying" and "destroyed" are triggered on the model before
-  // and after the model is destroyed, respectively. If an error is thrown
-  // during the "destroying" event, the model will not be destroyed.
+
+  /**
+   * `destroy` performs a `delete` on the model, using the model's {@link
+   * Model#idAttribute idAttribute} to constrain the query.
+   *
+   * A {@link Model#destroying "destroying"} event is triggered on the model before being
+   * destroyed. To prevent destroying the model (with validation, etc.), throwing an error
+   * inside one of these event listeners will stop destroying the model and
+   * reject the promise.
+   *
+   * A {@link Model#destroyed "destroyed"} event is fired after the model's
+   * removal is completed.
+   *
+   * @method Model#destroy
+   *
+   * @param {Object=}      options                  Hash of options.
+   * @param {Transaction=} options.transacting      Optionally run the query in a transaction.
+   *
+   * @fires Model#destroying Fired before the `delete` operation.
+   * @fires Model#destroying Fired after the `delete` operation.
+   */
   destroy: Promise.method(function(options) {
     options = options ? _.clone(options) : {};
     var sync = this.sync(options);
     options.query = sync.query;
     return Promise.bind(this).then(function() {
+
+      /**
+       * Destroying event.
+       *
+       * Fired before a `delete` query. A promise may be returned from the event
+       * handler for async behaviour. Throwing an exception from the handler
+       * will reject the promise and cancel the deletion.
+       *
+       * @event Bookshelf#Model#destroying
+       * @type {function}
+       * @param {Model}  model    The model firing the event.
+       * @param {Object} attrs    Model firing the event.
+       * @param {Object} options  Options object passed to {@link Model#save save}.
+       * @returns {Promise}
+       */
       return this.triggerThen('destroying', this, options);
     }).then(function() {
       return sync.del();
@@ -784,35 +1038,130 @@ var BookshelfModel = ModelBase.extend({
         throw new this.constructor.NoRowsDeletedError('No Rows Deleted');
       }
       this.clear();
+
+      /**
+       * Destroyed event.
+       *
+       * Fired before a `delete` query. A promise may be returned from the event
+       * handler for async behaviour. 
+       *
+       * @event Bookshelf#Model#destroyed
+       * @type {function}
+       * @param {Model}  model    The model firing the event.
+       * @param {Object} attrs    Model firing the event.
+       * @param {Object} options  Options object passed to {@link Model#save save}.
+       * @returns {Promise}
+       */
       return this.triggerThen('destroyed', this, resp, options);
     }).then(this._reset);
   }),
 
-  // Reset the query builder, called internally
-  // each time a query is run.
+  /**
+   *  Used to reset the internal state of the current query builder instance.
+   *  This method is called internally each time a database action is completed
+   *  by {@link Bookshelf#Sync}
+   *
+   *  @method Model#resetQuery
+   *  @returns {Model}          Self, this method is chainable.
+   */
   resetQuery: function() {
     this._knex = null;
     return this;
   },
 
-  // Tap into the "query chain" for this model.
+  /**
+   * The `query` method is used to tap into the underlying Knex query builder
+   * instance for the current model. If called with no arguments, it will
+   * return the query builder directly. Otherwise, it will call the specified
+   * method on the query builder, applying any additional arguments from the
+   * `model.query` call. If the method argument is a function, it will be
+   * called with the Knex query builder as the context and the first argument,
+   * returning the current model.
+   *
+   * @example
+   *
+   *   model
+   *     .query('where', 'other_id', '=', '5')
+   *     .fetch()
+   *     .then(function(model) {
+   *       ...
+   *     });
+   *   
+   *   model
+   *     .query({where: {other_id: '5'}, orWhere: {key: 'value'}})
+   *     .fetch()
+   *     .then(function(model) {
+   *       ...
+   *     });
+   *   
+   *   model.query(function(qb) {
+   *     qb.where('other_person', 'LIKE', '%Demo').orWhere('other_id', '>', 10);
+   *   }).fetch()
+   *     .then(function(model) {...
+   *   
+   *   var qb = model.query();
+   *       qb.where({id: 1}).select().then(function(resp) {...
+   *
+   * @method Model#query
+   * @param {function|Object|...string=} arguments The query method.
+   * @returns {Model|QueryBuilder}
+   *
+   *   Will return this model or, if called with no arguments, the underlying query builder.
+   *
+   * @see {@link http://knexjs.org/#Builder Knex `QueryBuilder`}
+   */
   query: function() {
     return Helpers.query(this, _.toArray(arguments));
   },
 
-  // Add the most common conditional directly to the model, everything else
-  // can be accessed with the `query` method.
+  /**
+   *  The where method is used as convenience for the most common {@link
+   *  Model#query query} method, adding a where clause to the builder. Any
+   *  additional knex methods may be accessed using {@link Model#query query}.
+   *
+   *  Accepts either key, value syntax, or a hash of attributes.
+   *
+   *  @example
+   *
+   *      model.where('favorite_color', '&lt;>', 'green').fetch().then(function() { //...
+   *      // or
+   *      model.where('favorite_color', 'red').fetch().then(function() { //...
+   *      // or
+   *      model.where({favorite_color: 'red', shoe_size: 12}).then(function() { //...
+   *
+   *  @method Model#where
+   *  @param {Object|...string}
+   *
+   *    Either `key, [operator], value` syntax, or a hash of attributes to
+   *    match. Note that these must be formatted as they are in the database,
+   *    not how they are stored after {@link Model#parse}.
+   *
+   *  @returns {Model} Self, this method is chainable.
+   *
+   *  @see Model#query
+   */
   where: function() {
     var args = _.toArray(arguments);
     return this.query.apply(this, ['where'].concat(args));
   },
 
-  // Creates and returns a new `Sync` instance.
+  /**
+   * Creates and returns a new Bookshelf.Sync instance.
+   *
+   * @method Model#sync
+   * @private
+   * @returns Sync
+   */
   sync: function(options) {
     return new Sync(this, options);
   },
 
-  // Helper for setting up the `morphOne` or `morphMany` relations.
+  /**
+   * Helper for setting up the `morphOne` or `morphMany` relations.
+   *
+   * @method Model#_morphOneOrMany
+   * @private
+   */
   _morphOneOrMany: function(Target, morphName, columnNames, morphValue, type) {
     if (!_.isArray(columnNames)) {
       // Shift by one place
@@ -864,13 +1213,13 @@ module.exports = BookshelfModel;
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Bookshelf.html">Bookshelf</a></li></ul><h3>Classes</h3><ul><li><a href="Bookshelf_Model.html">Model</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Bookshelf.html">Bookshelf</a></li></ul><h3>Classes</h3><ul><li><a href="Bookshelf_Model.html">Model</a></li></ul><h3>Events</h3><ul><li><a href="Bookshelf_Model.html#event:created">created</a></li><li><a href="Bookshelf_Model.html#event:creating">creating</a></li><li><a href="Bookshelf_Model.html#event:destroyed">destroyed</a></li><li><a href="Bookshelf_Model.html#event:destroying">destroying</a></li><li><a href="Bookshelf_Model.html#event:saved">saved</a></li><li><a href="Bookshelf_Model.html#event:saving">saving</a></li><li><a href="Bookshelf_Model.html#event:updated">updated</a></li><li><a href="Bookshelf_Model.html#event:updating">updating</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.1</a> on Sun Jun 14 2015 19:28:17 GMT+1000 (AEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.1</a> on Thu Jun 18 2015 02:15:07 GMT+1000 (AEST)
 </footer>
 
 <script> prettyPrint(); </script>
