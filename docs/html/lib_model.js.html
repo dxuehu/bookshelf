@@ -28,16 +28,18 @@
         <article>
             <pre class="prettyprint source linenums"><code>// Model
 // ---------------
-var _              = require('lodash');
-var createError    = require('create-error')
+'use strict';
 
-var Sync           = require('./sync');
-var Helpers        = require('./helpers');
-var EagerRelation  = require('./eager');
-var Errors         = require('./errors');
+var _ = require('lodash');
+var createError = require('create-error');
 
-var ModelBase      = require('./base/model');
-var Promise        = require('./base/promise');
+var Sync = require('./sync');
+var Helpers = require('./helpers');
+var EagerRelation = require('./eager');
+var Errors = require('./errors');
+
+var ModelBase = require('./base/model');
+var Promise = require('./base/promise');
 
 /**
  * When creating an instance of a model, you can pass in the initial values of
@@ -149,8 +151,8 @@ var BookshelfModel = ModelBase.extend({
    *
    * @returns {Model}
    */
-  hasOne: function(Target, foreignKey) {
-    return this._relation('hasOne', Target, {foreignKey: foreignKey}).init(this);
+  hasOne: function hasOne(Target, foreignKey) {
+    return this._relation('hasOne', Target, { foreignKey: foreignKey }).init(this);
   },
 
   /**
@@ -171,10 +173,10 @@ var BookshelfModel = ModelBase.extend({
    *
    * @returns {Collection}
    */
-  hasMany: function(Target, foreignKey) {
-    return this._relation('hasMany', Target, {foreignKey: foreignKey}).init(this);
+  hasMany: function hasMany(Target, foreignKey) {
+    return this._relation('hasMany', Target, { foreignKey: foreignKey }).init(this);
   },
- 
+
   /**
    * The `belongsTo` relationship is used when a model is a member of
    * another `Target` model.
@@ -214,8 +216,8 @@ var BookshelfModel = ModelBase.extend({
    *
    * @returns {Model}
    */
-  belongsTo: function(Target, foreignKey) {
-    return this._relation('belongsTo', Target, {foreignKey: foreignKey}).init(this);
+  belongsTo: function belongsTo(Target, foreignKey) {
+    return this._relation('belongsTo', Target, { foreignKey: foreignKey }).init(this);
   },
 
   /**
@@ -316,7 +318,7 @@ var BookshelfModel = ModelBase.extend({
    *
    * @returns {Collection}
    */
-  belongsToMany: function(Target, joinTableName, foreignKey, otherKey) {
+  belongsToMany: function belongsToMany(Target, joinTableName, foreignKey, otherKey) {
     return this._relation('belongsToMany', Target, {
       joinTableName: joinTableName, foreignKey: foreignKey, otherKey: otherKey
     }).init(this);
@@ -369,7 +371,7 @@ var BookshelfModel = ModelBase.extend({
    *
    * @returns {Model} The related model.
    */
-  morphOne: function(Target, name, columnNames, morphValue) {
+  morphOne: function morphOne(Target, name, columnNames, morphValue) {
     return this._morphOneOrMany(Target, name, columnNames, morphValue, 'morphOne');
   },
 
@@ -421,7 +423,7 @@ var BookshelfModel = ModelBase.extend({
    *
    * @returns {Collection} A collection of related models.
    */
-  morphMany: function(Target, name, columnNames, morphValue) {
+  morphMany: function morphMany(Target, name, columnNames, morphValue) {
     return this._morphOneOrMany(Target, name, columnNames, morphValue, 'morphMany');
   },
 
@@ -459,7 +461,7 @@ var BookshelfModel = ModelBase.extend({
    *
    * @returns {Model}
    */
-  morphTo: function(morphName) {
+  morphTo: function morphTo(morphName) {
     var columnNames, remainder;
     if (!_.isString(morphName)) throw new Error('The `morphTo` name must be specified.');
     if (_.isArray(arguments[1])) {
@@ -469,7 +471,7 @@ var BookshelfModel = ModelBase.extend({
       columnNames = null;
       remainder = _.rest(arguments);
     }
-    return this._relation('morphTo', null, {morphName: morphName, columnNames: columnNames, candidates: remainder}).init(this);
+    return this._relation('morphTo', null, { morphName: morphName, columnNames: columnNames, candidates: remainder }).init(this);
   },
 
   /**
@@ -544,8 +546,8 @@ var BookshelfModel = ModelBase.extend({
    *
    * @returns {Collection}
    */
-  through: function(Interim, throughForeignKey, otherKey) {
-    return this.relatedData.through(this, Interim, {throughForeignKey: throughForeignKey, otherKey: otherKey});
+  through: function through(Interim, throughForeignKey, otherKey) {
+    return this.relatedData.through(this, Interim, { throughForeignKey: throughForeignKey, otherKey: otherKey });
   },
 
   /**
@@ -626,43 +628,37 @@ var BookshelfModel = ModelBase.extend({
    *  A promise resolving to the fetched {@link Model model} or `undefined` if none exists.
    *
    */
-  fetch: Promise.method(function(options) {
+  fetch: Promise.method(function (options) {
     options = options ? _.clone(options) : {};
 
     // Run the `first` call on the `sync` object to fetch a single model.
-    return this.sync(options)
-      .first()
-      .bind(this)
+    return this.sync(options).first().bind(this)
 
-      // Jump the rest of the chain if the response doesn't exist...
-      .tap(function(response) {
-        if (!response || response.length === 0) {
-          if (options.require) throw new this.constructor.NotFoundError('EmptyResponse');
-          return Promise.reject(null);
-        }
-      })
+    // Jump the rest of the chain if the response doesn't exist...
+    .tap(function (response) {
+      if (!response || response.length === 0) {
+        if (options.require) throw new this.constructor.NotFoundError('EmptyResponse');
+        return Promise.reject(null);
+      }
+    })
 
-      // Now, load all of the data into the model as necessary.
-      .tap(this._handleResponse)
+    // Now, load all of the data into the model as necessary.
+    .tap(this._handleResponse)
 
-      // If the "withRelated" is specified, we also need to eager load all of the
-      // data on the model, as a side-effect, before we ultimately jump into the
-      // next step of the model. Since the `columns` are only relevant to the current
-      // level, ensure those are omitted from the options.
-      .tap(function(response) {
-        if (options.withRelated) {
-          return this._handleEager(response, _.omit(options, 'columns'));
-        }
-      })
-
-      .tap(function(response) {
-        return this.triggerThen('fetched', this, response, options);
-      })
-      .return(this)
-      .catch(function(err) {
-        if (err === null) return err;
-        throw err;
-      });
+    // If the "withRelated" is specified, we also need to eager load all of the
+    // data on the model, as a side-effect, before we ultimately jump into the
+    // next step of the model. Since the `columns` are only relevant to the current
+    // level, ensure those are omitted from the options.
+    .tap(function (response) {
+      if (options.withRelated) {
+        return this._handleEager(response, _.omit(options, 'columns'));
+      }
+    }).tap(function (response) {
+      return this.triggerThen('fetched', this, response, options);
+    })['return'](this)['catch'](function (err) {
+      if (err === null) return err;
+      throw err;
+    });
   }),
 
   /**
@@ -703,20 +699,18 @@ var BookshelfModel = ModelBase.extend({
    * @returns {Promise} A promise resolving to the fetched {@link Collection collection}.
    *
    */
-  fetchAll: function(options) {
+  fetchAll: function fetchAll(options) {
+    var _this = this;
+
     var collection = this.constructor.collection();
     collection._knex = this.query().clone();
     this.resetQuery();
     if (this.relatedData) collection.relatedData = this.relatedData;
-    var model = this;
-    return collection
-      .on('fetching', function(collection, columns, options) {
-        return model.triggerThen('fetching:collection', collection, columns, options);
-      })
-      .on('fetched', function(collection, resp, options) {
-        return model.triggerThen('fetched:collection', collection, resp, options);
-      })
-      .fetch(options);
+    return collection.once('fetching', function (__, columns, opts) {
+      return _this.triggerThen('fetching:collection', collection, columns, opts);
+    }).once('fetched', function (__, resp, opts) {
+      return _this.triggerThen('fetched:collection', collection, resp, opts);
+    }).fetch(options);
   },
 
   /**
@@ -752,18 +746,15 @@ var BookshelfModel = ModelBase.extend({
    *
    *  @returns {Model}          Self, this method is chainable.
    */
-  load: Promise.method(function(relations, options) {
-    return Promise.bind(this)
-      .then(function() {
-        return [this.format(_.extend(Object.create(null), this.attributes))];
-      })
-      .then(function(response) {
-        return this._handleEager(response, _.extend({}, options, {
-          shallow: true,
-          withRelated: _.isArray(relations) ? relations : [relations]
-        }));
-      })
-      .return(this);
+  load: Promise.method(function (relations, options) {
+    return Promise.bind(this).then(function () {
+      return [this.format(_.extend(Object.create(null), this.attributes))];
+    }).then(function (response) {
+      return this._handleEager(response, _.extend({}, options, {
+        shallow: true,
+        withRelated: _.isArray(relations) ? relations : [relations]
+      }));
+    })['return'](this);
   }),
 
   /**
@@ -831,11 +822,11 @@ var BookshelfModel = ModelBase.extend({
    *
    * @returns {Promise} A promise resolving to the saved and updated model.
    */
-  save: Promise.method(function(key, val, options) {
+  save: Promise.method(function (key, val, options) {
     var attrs;
 
     // Handle both `"key", value` and `{key: value}` -style arguments.
-    if (key == null || typeof key === "object") {
+    if (key == null || typeof key === 'object') {
       attrs = key || {};
       options = _.clone(val) || {};
     } else {
@@ -843,12 +834,12 @@ var BookshelfModel = ModelBase.extend({
       options = options ? _.clone(options) : {};
     }
 
-    return Promise.bind(this).then(function() {
-      return this.isNew(options);
-    }).then(function(isNew) {
+    return Promise.bind(this).then(function () {
+      return this.saveMethod(options);
+    }).then(function (method) {
 
       // Determine whether which kind of save we will do, update or insert.
-      var method = options.method = this.saveMethod(options);
+      options.method = method;
 
       // If the object is being created, we merge any defaults here rather than
       // during object creation.
@@ -861,12 +852,12 @@ var BookshelfModel = ModelBase.extend({
 
       // Set the attributes on the model. Note that we do this before adding
       // timestamps, as `timestamp` calls `set` internally.
-      this.set(attrs, {silent: true});
+      this.set(attrs, { silent: true });
 
       // Now set timestamps if appropriate. Extend `attrs` so that the
       // timestamps will be provided for a patch operation.
       if (this.hasTimestamps) {
-        _.extend(attrs, this.timestamp({method: method, silent: true}));
+        _.extend(attrs, this.timestamp({ method: method, silent: true }));
       }
 
       // If there are any save constraints, set them on the model.
@@ -923,12 +914,9 @@ var BookshelfModel = ModelBase.extend({
        * @param {Object} options  Options object passed to {@link Model#save save}.
        * @returns {Promise}
        */
-      return this.triggerThen((method === 'insert' ? 'creating saving' : 'updating saving'), this, attrs, options)
-      .bind(this)
-      .then(function() {
+      return this.triggerThen(method === 'insert' ? 'creating saving' : 'updating saving', this, attrs, options).bind(this).then(function () {
         return sync[options.method](method === 'update' &amp;&amp; options.patch ? attrs : this.attributes);
-      })
-      .then(function(resp) {
+      }).then(function (resp) {
 
         // After a successful database save, the id is updated if the model was created
         if (method === 'insert' &amp;&amp; this.id == null) {
@@ -983,12 +971,10 @@ var BookshelfModel = ModelBase.extend({
          * @param {Object} options  Options object passed to {@link Model#save save}.
          * @returns {Promise}
          */
-        return this.triggerThen((method === 'insert' ? 'created saved' : 'updated saved'), this, resp, options);
+        return this.triggerThen(method === 'insert' ? 'created saved' : 'updated saved', this, resp, options);
       });
-    })
-    .return(this);
+    })['return'](this);
   }),
-
 
   /**
    * `destroy` performs a `delete` on the model, using the model's {@link
@@ -1010,11 +996,11 @@ var BookshelfModel = ModelBase.extend({
    * @fires Model#destroying Fired before the `delete` operation.
    * @fires Model#destroying Fired after the `delete` operation.
    */
-  destroy: Promise.method(function(options) {
+  destroy: Promise.method(function (options) {
     options = options ? _.clone(options) : {};
     var sync = this.sync(options);
     options.query = sync.query;
-    return Promise.bind(this).then(function() {
+    return Promise.bind(this).then(function () {
 
       /**
        * Destroying event.
@@ -1031,9 +1017,9 @@ var BookshelfModel = ModelBase.extend({
        * @returns {Promise}
        */
       return this.triggerThen('destroying', this, options);
-    }).then(function() {
+    }).then(function () {
       return sync.del();
-    }).then(function(resp) {
+    }).then(function (resp) {
       if (options.require &amp;&amp; resp === 0) {
         throw new this.constructor.NoRowsDeletedError('No Rows Deleted');
       }
@@ -1064,7 +1050,7 @@ var BookshelfModel = ModelBase.extend({
    *  @method Model#resetQuery
    *  @returns {Model}          Self, this method is chainable.
    */
-  resetQuery: function() {
+  resetQuery: function resetQuery() {
     this._knex = null;
     return this;
   },
@@ -1110,7 +1096,7 @@ var BookshelfModel = ModelBase.extend({
    *
    * @see {@link http://knexjs.org/#Builder Knex `QueryBuilder`}
    */
-  query: function() {
+  query: function query() {
     return Helpers.query(this, _.toArray(arguments));
   },
 
@@ -1140,7 +1126,7 @@ var BookshelfModel = ModelBase.extend({
    *
    *  @see Model#query
    */
-  where: function() {
+  where: function where() {
     var args = _.toArray(arguments);
     return this.query.apply(this, ['where'].concat(args));
   },
@@ -1152,7 +1138,7 @@ var BookshelfModel = ModelBase.extend({
    * @private
    * @returns Sync
    */
-  sync: function(options) {
+  sync: function sync(options) {
     return new Sync(this, options);
   },
 
@@ -1162,48 +1148,47 @@ var BookshelfModel = ModelBase.extend({
    * @method Model#_morphOneOrMany
    * @private
    */
-  _morphOneOrMany: function(Target, morphName, columnNames, morphValue, type) {
+  _morphOneOrMany: function _morphOneOrMany(Target, morphName, columnNames, morphValue, type) {
     if (!_.isArray(columnNames)) {
       // Shift by one place
       morphValue = columnNames;
       columnNames = null;
     }
     if (!morphName || !Target) throw new Error('The polymorphic `name` and `Target` are required.');
-    return this._relation(type, Target, {morphName: morphName, morphValue: morphValue, columnNames: columnNames}).init(this);
+    return this._relation(type, Target, { morphName: morphName, morphValue: morphValue, columnNames: columnNames }).init(this);
   },
 
   // Handles the response data for the model, returning from the model's fetch call.
   // Todo: {silent: true, parse: true}, for parity with collection#set
   // need to check on Backbone's status there, ticket #2636
-  _handleResponse: function(response) {
+  _handleResponse: function _handleResponse(response) {
     var relatedData = this.relatedData;
-    this.set(this.parse(response[0]), {silent: true})._reset();
+    this.set(this.parse(response[0]), { silent: true })._reset();
     if (relatedData &amp;&amp; relatedData.isJoined()) {
       relatedData.parsePivot([this]);
     }
   },
 
   // Handle the related data loading on the model.
-  _handleEager: function(response, options) {
+  _handleEager: function _handleEager(response, options) {
     return new EagerRelation([this], response, this).fetch(options);
   }
 
 }, {
 
-  extended: function(child) {
-    child.NotFoundError      = createError(this.NotFoundError)
-    child.NoRowsUpdatedError = createError(this.NoRowsUpdatedError)
-    child.NoRowsDeletedError = createError(this.NoRowsDeletedError)
+  extended: function extended(child) {
+    child.NotFoundError = createError(this.NotFoundError);
+    child.NoRowsUpdatedError = createError(this.NoRowsUpdatedError);
+    child.NoRowsDeletedError = createError(this.NoRowsDeletedError);
   }
 
 });
 
-BookshelfModel.NotFoundError      = Errors.NotFoundError,
-BookshelfModel.NoRowsUpdatedError = Errors.NoRowsUpdatedError,
-BookshelfModel.NoRowsDeletedError = Errors.NoRowsDeletedError
+BookshelfModel.NotFoundError = Errors.NotFoundError;
+BookshelfModel.NoRowsUpdatedError = Errors.NoRowsUpdatedError;
+BookshelfModel.NoRowsDeletedError = Errors.NoRowsDeletedError;
 
-module.exports = BookshelfModel;
-</code></pre>
+module.exports = BookshelfModel;</code></pre>
         </article>
     </section>
 
@@ -1219,7 +1204,7 @@ module.exports = BookshelfModel;
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.1</a> on Thu Jun 18 2015 02:15:07 GMT+1000 (AEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.1</a> on Thu Jun 18 2015 21:53:57 GMT+1000 (AEST)
 </footer>
 
 <script> prettyPrint(); </script>
