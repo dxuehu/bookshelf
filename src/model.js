@@ -41,7 +41,7 @@ var Promise        = require('./base/promise');
  *
  * @constructor
  * @extends ModelBase
- * @alias Bookshelf#Model
+ * @alias Model
  *
  * @param {Object}   attributes            Initial values for this model's attributes.
  * @param {Object=}  options               Hash of options.
@@ -67,7 +67,7 @@ var BookshelfModel = ModelBase.extend({
    *       tableName: 'televisions'
    *     });
    *
-   * @member {string} Bookshelf#Model#tableName
+   * @member {string} Model#tableName
    */
 
   /**
@@ -78,7 +78,7 @@ var BookshelfModel = ModelBase.extend({
    * but your database's columns in `snake_case`, for example) this refers to
    * the name returned by parse (`myId`), not the database column (`my_id`).
    *
-   * @member {string} Bookshelf#Model#idAttribute
+   * @member {string} Model#idAttribute
    */
 
   /**
@@ -106,8 +106,7 @@ var BookshelfModel = ModelBase.extend({
    *       ...
    *     });
    *
-   * @function #hasOne
-   * @memberOf Model
+   * @method Model#hasOne
    *
    * @param {Model} Target
    *
@@ -172,7 +171,7 @@ var BookshelfModel = ModelBase.extend({
    *       console.log(JSON.stringify(book.related('author')));
    *     });
    * 
-   * @method Bookshelf#Model#belongsTo
+   * @method Model#belongsTo
    *
    * @param {Model} Target
    *
@@ -264,7 +263,7 @@ var BookshelfModel = ModelBase.extend({
    *     });
    *
    * @belongsTo Model
-   * @function  Model#belongsToMany
+   * @method  Model#belongsToMany
    * @param {Model} Target
    *
    *   Constructor of {@linkcode Model} targeted by join.
@@ -325,7 +324,7 @@ var BookshelfModel = ModelBase.extend({
    * If your argument is an array, it will be assumed to contain custom
    * `columnNames`. If it's not, it will be assumed to indicate a `morphValue`.
    *
-   * @method Bookshelf#Model#morphOne
+   * @method Model#morphOne
    *
    * @param {Model}     Target      Constructor of {@linkcode Model} targeted by join.
    * @param {string=}   name        Prefix for `_id` and `_type` columns.
@@ -377,7 +376,7 @@ var BookshelfModel = ModelBase.extend({
    *       }
    *     });
    *
-   * @method Bookshelf#Model#morphMany
+   * @method Model#morphMany
    *
    * @param {Model}     Target      Constructor of {@linkcode Model} targeted by join.
    * @param {string=}   name        Prefix for `_id` and `_type` columns.
@@ -420,7 +419,7 @@ var BookshelfModel = ModelBase.extend({
    *       }
    *     });
    * 
-   * @method Bookshelf#Model#morphTo
+   * @method Model#morphTo
    *
    * @param {string}      name        Prefix for `_id` and `_type` columns.
    * @param {(string[])=} columnNames
@@ -500,7 +499,7 @@ var BookshelfModel = ModelBase.extend({
    * toJSON}, the pivot model is flattened to values prefixed with
    * `_pivot_`.
    *
-   * @method Bookshelf#Model#through
+   * @method Model#through
    * @param {Model} Interim Pivot model.
    * @param {string=} throughForeignKey
    *
@@ -526,7 +525,7 @@ var BookshelfModel = ModelBase.extend({
    * query. 
    *
    * A {@link Model#fetching "fetching"} event will be fired just before the
-   * record is fetched; a good place to hook into for validation. A {@link
+   * record is fetched; a good place to hook into for validation. {@link
    * Model#fetched "fetched"} event will be fired when a record is successfully
    * retrieved.
    *
@@ -574,13 +573,13 @@ var BookshelfModel = ModelBase.extend({
    *       console.log(book.toJSON());
    *     });
    *
-   * @method Bookshelf#Model#fetch
+   * @method Model#fetch
    *
    * @param {Object=}  options - Hash of options.
    * @param {boolean=} [options.require=false]
    *
    *   If `true`, will reject the returned response with a {@link
-   *   Model#NotFoundError NotFoundError} if no result is found.
+   *   Model.NotFoundError NotFoundError} if no result is found.
    *
    * @param {(string|string[])=} [options.columns='*']
    *
@@ -592,6 +591,8 @@ var BookshelfModel = ModelBase.extend({
    *
    * @fires Model#fetching
    * @fires Model#fetched 
+   *
+   * @throws {Model.NotFoundError}
    *
    * @returns {Promise<Model|undefined>}
    *
@@ -628,6 +629,18 @@ var BookshelfModel = ModelBase.extend({
       })
 
       .tap(function(response) {
+
+        /**
+         * Fired after a `fetch` operation. A promise may be returned from the
+         * event handler for async behaviour.
+         *
+         * @event Model#fetched
+         * @type {function}
+         * @param {Model}  model    The model firing the event.
+         * @param {Object} reponse  Model firing the event.
+         * @param {Object} options  Options object passed to {@link Model#fetch fetch}.
+         * @returns {Promise}
+         */
         return this.triggerThen('fetched', this, response, options);
       })
       .return(this)
@@ -644,8 +657,6 @@ var BookshelfModel = ModelBase.extend({
    * trigger an error if no models are found, pass {require: true} as one of
    * the options to the `fetchAll` call.
    *
-   * A {@link Model#fetching "fetching"} event will be  A
-   *
    * If you need to constrain the query performed by fetch, you can call the
    * {@link Model#query query} method before calling fetch.
    *
@@ -660,19 +671,19 @@ var BookshelfModel = ModelBase.extend({
    *
    *   Optionally run the query in a transaction.
    *
-   * @fires Model#"fetching:collection"
+   * @fires Model#fetching:collection
    *
    *   Fired just before the {@link Collection} is fetched; a good place to hook into for validations.
    *
-   * @fires Model#"fetched:collection"
+   * @fires Model#fetched:collection
    *
    *   Fired when a record is successfully retrieved.
    *
-   * @throws {Bookshelf.EmptyError}
+   * @throws {Model.EmptyError}
    *
    *  Rejects the promise in the event of an empty response if the `require: true` option.
    *
-   * @returns {Promise} A promise resolving to the fetched {@link Collection collection}.
+   * @returns {Promise<Collection>} A promise resolving to the fetched {@link Collection collection}.
    *
    */
   fetchAll: function(options) {
@@ -682,9 +693,31 @@ var BookshelfModel = ModelBase.extend({
     if (this.relatedData) collection.relatedData = this.relatedData;
     return collection
       .once('fetching', (__, columns, opts) => {
+        /**
+         * Fired before a {@link Model#fetchAll fetchAll} operation. A promise
+         * may be returned from the event handler for async behaviour.
+         *
+         * @event Model#fetching:collection
+         * @type {function}
+         * @param {Model}  collection The collection that has been fetched.
+         * @param {Object} columns    The columns being retrieved by the query.
+         * @param {Object} options    Options object passed to {@link Model#fetchAll fetchAll}.
+         * @returns {Promise}
+         */
         return this.triggerThen('fetching:collection', collection, columns, opts);
       })
       .once('fetched', (__, resp, opts) => {
+        /**
+         * Fired after a {@link Model#fetchAll fetchAll} operation. A promise
+         * may be returned from the event handler for async behaviour.
+         *
+         * @event Model#fetched:collection
+         * @type {function}
+         * @param {Model}  collection The collection that has been fetched.
+         * @param {Object} resp       The Knex query response.
+         * @param {Object} options    Options object passed to {@link Model#fetchAll fetchAll}.
+         * @returns {Promise}
+         */
         return this.triggerThen('fetched:collection', collection, resp, opts);
       })
       .fetch(options);
@@ -771,8 +804,6 @@ var BookshelfModel = ModelBase.extend({
    * Model#saving "saving"} event is fired, the knex query object should is
    * available in `options.query`.
    *
-   * @example
-   *
    *     // Save with no arguments
    *     Model.forge({id: 5, firstName: "John", lastName: "Smith"}).save().then(function() { //...
    *
@@ -790,8 +821,9 @@ var BookshelfModel = ModelBase.extend({
    * @param {Object=}      options                  Hash of options.
    * @param {Transaction=} options.transacting      Optionally run the query in a transaction.
    * @param {string=}      options.method           Explicitly select a save method, either `"update"` or `"insert"`.
-   * @param {string=}      [options.defaults=false] Assign {@link Model#defaults defaults} in an `update` operation.
+   * @param {string}      [options.defaults=false] Assign {@link Model#defaults defaults} in an `update` operation.
    * @param {string=}      options.patch            Explicitly select a save method.
+   * @param {bool}         [options.require=true]   Throw a {@link Model.NoRowsUpdatedError} if no records are affected by save.
    *
    * @fires Model#saving   Fired before performing either an `insert` or `update`.
    * @fires Model#creating Fired before performing an `insert`.
@@ -800,7 +832,9 @@ var BookshelfModel = ModelBase.extend({
    * @fires Model#updated  Fired after performing an `update`.
    * @fires Model#saved    Fired after performing either an `insert` or `update`.
    *
-   * @returns {Promise} A promise resolving to the saved and updated model.
+   * @throws Model.
+   *
+   * @returns {Promise<Model>} A promise resolving to the saved and updated model.
    */
   save: Promise.method(function(key, val, options) {
     var attrs;
@@ -857,7 +891,7 @@ var BookshelfModel = ModelBase.extend({
        * returned from the event handler for async behaviour. Throwing an
        * exception from the handler will cancel the save.
        *
-       * @event Bookshelf#Model#saving
+       * @event Model#saving
        * @type {function}
        * @param {Model}  model    The model firing the event.
        * @param {Object} attrs    Model firing the event.
@@ -872,7 +906,7 @@ var BookshelfModel = ModelBase.extend({
        * returned from the event handler for async behaviour. Throwing an
        * exception from the handler will cancel the save operation.
        *
-       * @event Bookshelf#Model#creating
+       * @event Model#creating
        * @type {function}
        * @param {Model}  model    The model firing the event.
        * @param {Object} attrs    Model firing the event.
@@ -887,7 +921,7 @@ var BookshelfModel = ModelBase.extend({
        * returned from the event handler for async behaviour. Throwing an
        * exception from the handler will cancel the save operation.
        *
-       * @event Bookshelf#Model#updating
+       * @event Model#updating
        * @type {function}
        * @param {Model}  model    The model firing the event.
        * @param {Object} attrs    Model firing the event.
@@ -921,7 +955,7 @@ var BookshelfModel = ModelBase.extend({
          *
          * Fired before after an `insert` or `update` query.
          *
-         * @event Bookshelf#Model#saved
+         * @event Model#saved
          * @type {function}
          * @param {Model}  model    The model firing the event.
          * @param {Object} resp     The database response.
@@ -934,7 +968,7 @@ var BookshelfModel = ModelBase.extend({
          *
          * Fired before after an `insert` query.
          *
-         * @event Bookshelf#Model#created
+         * @event Model#created
          * @type {function}
          * @param {Model}  model    The model firing the event.
          * @param {Object} attrs    Model firing the event.
@@ -947,7 +981,7 @@ var BookshelfModel = ModelBase.extend({
          *
          * Fired before after an `update` query.
          *
-         * @event Bookshelf#Model#updated
+         * @event Model#updated
          * @type {function}
          * @param {Model}  model    The model firing the event.
          * @param {Object} attrs    Model firing the event.
@@ -994,7 +1028,7 @@ var BookshelfModel = ModelBase.extend({
        * handler for async behaviour. Throwing an exception from the handler
        * will reject the promise and cancel the deletion.
        *
-       * @event Bookshelf#Model#destroying
+       * @event Model#destroying
        * @type {function}
        * @param {Model}  model    The model firing the event.
        * @param {Object} attrs    Model firing the event.
@@ -1016,7 +1050,7 @@ var BookshelfModel = ModelBase.extend({
        * Fired before a `delete` query. A promise may be returned from the event
        * handler for async behaviour. 
        *
-       * @event Bookshelf#Model#destroyed
+       * @event Model#destroyed
        * @type {function}
        * @param {Model}  model    The model firing the event.
        * @param {Object} attrs    Model firing the event.
@@ -1030,7 +1064,7 @@ var BookshelfModel = ModelBase.extend({
   /**
    *  Used to reset the internal state of the current query builder instance.
    *  This method is called internally each time a database action is completed
-   *  by {@link Bookshelf#Sync}
+   *  by {@link Sync}
    *
    *  @method Model#resetQuery
    *  @returns {Model}          Self, this method is chainable.
@@ -1143,9 +1177,18 @@ var BookshelfModel = ModelBase.extend({
     return this._relation(type, Target, {morphName: morphName, morphValue: morphValue, columnNames: columnNames}).init(this);
   },
 
-  // Handles the response data for the model, returning from the model's fetch call.
-  // Todo: {silent: true, parse: true}, for parity with collection#set
-  // need to check on Backbone's status there, ticket #2636
+  /**
+   * @name Model#_handleResponse
+   * @private
+   * @description
+   *
+   *   Handles the response data for the model, returning from the model's fetch call.
+   *
+   * @param {Object} Response from Knex query.
+   *
+   * @todo: need to check on Backbone's status there, ticket #2636
+   * @todo: {silent: true, parse: true}, for parity with collection#set
+   */
   _handleResponse: function(response) {
     var relatedData = this.relatedData;
     this.set(this.parse(response[0]), {silent: true})._reset();
@@ -1154,7 +1197,15 @@ var BookshelfModel = ModelBase.extend({
     }
   },
 
-  // Handle the related data loading on the model.
+  /**
+   * @name Model#_handleEager
+   * @private
+   * @description
+   *
+   *   Handles the related data loading on the model.
+   *
+   * @param {Object} Response from Knex query.
+   */
   _handleEager: function(response, options) {
     return new EagerRelation([this], response, this).fetch(options);
   }
@@ -1162,8 +1213,32 @@ var BookshelfModel = ModelBase.extend({
 }, {
 
   extended: function(child) {
-    child.NotFoundError      = createError(this.NotFoundError)
+    /**
+     * @class Model.NotFoundError
+     * @description
+     *
+     *   Thrown when no records are found by {@link Model#fetch fetch}, {@link
+     *   Model#fetchAll fetchAll} or {@link Model#refresh} when called with the
+     *   `{require: true}` option.
+     */
+    child.NotFoundError = createError(this.NotFoundError)
+
+    /**
+     * @class Model.NoRowsUpdated
+     * @description
+     *
+     *   Thrown when no records are found by {@link Model#fetch fetch} or
+     *   {@link Model#refresh} unless called with the `{require: false}` option.
+     */
     child.NoRowsUpdatedError = createError(this.NoRowsUpdatedError)
+
+    /**
+     * @class Model.NoRowsDeletedError
+     * @description
+     *
+     *   Thrown when no record is deleted by {@link Model#destroy destroy}
+     *   if called with the `{require: true}` option.
+     */
     child.NoRowsDeletedError = createError(this.NoRowsDeletedError)
   }
 
