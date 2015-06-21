@@ -32,6 +32,11 @@
         Model
         </h2>
         
+            <div class="class-description"><p>Models are simple objects representing individual database rows, specifying
+the tableName and any relations to other models. They can be extended with
+any domain-specific methods, which can handle components such as validations,
+computed properties, and access control.</p></div>
+        
     
 </header>
 
@@ -40,6 +45,8 @@
     
         
 
+    
+    <h2>Constructor</h2>
     
 
     <h4 class="name" id="Model"><span class="type-signature"></span>new Model<span class="signature">(attributes, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
@@ -50,7 +57,7 @@
 
 <div class="description">
     <p>When creating an instance of a model, you can pass in the initial values of
-the attributes, which will be <code>set</code> on the
+the attributes, which will be <a href="Model.html#set"><code>set</code></a> on the
 model. If you define an <code>initialize</code> function, it will be invoked
 when the model is created.</p>
 <pre class="prettyprint source"><code>new Book({
@@ -303,8 +310,8 @@ actual constructor function for your model.</p>
                 </td>
             
 
-            <td class="description last"><p>Convert attributes by <code>parse</code> before being
-  <code>set</code> on the model.</p></td>
+            <td class="description last"><p>Convert attributes by <a href="Model.html#parse"><code>parse</code></a> before being
+  <a href="Model.html#set"><code>set</code></a> on the model.</p></td>
         </tr>
 
     
@@ -352,7 +359,7 @@ actual constructor function for your model.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line61">line 61</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -388,7 +395,7 @@ actual constructor function for your model.</p>
 
 
     <ul>
-        <li>ModelBase</li>
+        <li><a href="ModelBase.html">ModelBase</a></li>
     </ul>
 
 
@@ -428,7 +435,7 @@ actual constructor function for your model.</p>
 <div class="description">
     <p>This tells the model which attribute to expect as the unique identifier
 for each database row (typically an auto-incrementing primary key named
-<code>&quot;id&quot;</code>). Note that if you are using <code>parse</code> and <code>format</code> (to have your model's attributes in <code>camelCase</code>,
+<code>&quot;id&quot;</code>). Note that if you are using <a href="Model.html#parse"><code>parse</code></a> and <a href="Model.html#format"><code>format</code></a> (to have your model's attributes in <code>camelCase</code>,
 but your database's columns in <code>snake_case</code>, for example) this refers to
 the name returned by parse (<code>myId</code>), not the database column (<code>my_id</code>).</p>
 </div>
@@ -456,6 +463,11 @@ the name returned by parse (<code>myId</code>), not the database column (<code>m
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#idAttribute">ModelBase#idAttribute</a>
+    </li></ul></dd>
+    
 
     
 
@@ -478,7 +490,7 @@ the name returned by parse (<code>myId</code>), not the database column (<code>m
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line75">line 75</a>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line67">line 67</a>
     </li></ul></dd>
     
 
@@ -505,9 +517,6 @@ the name returned by parse (<code>myId</code>), not the database column (<code>m
     <p>A required property for any database usage, The
 <a href="Model.html#tableName"><code>tableName</code></a> property refers to the database
 table name the model will query against.</p>
-<pre class="prettyprint source"><code>var Television = bookshelf.Model.extend({
-  tableName: 'televisions'
-});</code></pre>
 </div>
 
 
@@ -533,6 +542,11 @@ table name the model will query against.</p>
     
 
     
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#tableName">ModelBase#tableName</a>
+    </li></ul></dd>
+    
 
     
 
@@ -555,7 +569,7 @@ table name the model will query against.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line63">line 63</a>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line39">line 39</a>
     </li></ul></dd>
     
 
@@ -568,6 +582,13 @@ table name the model will query against.</p>
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var Television = bookshelf.Model.extend({
+  tableName: 'televisions'
+});</code></pre>
 
 
 
@@ -704,7 +725,7 @@ Book.where({id: 1}).fetch({withRelated: ['author']}).then(function(book) {
 
             <td class="description last"><p>ForeignKey in this model. By default, the foreignKey is assumed to
   be the singular form of the <code>Target</code> model's tableName, followed by <code>_id</code> /
-  <code>_{{idAttribute}}</code>.</p></td>
+  <code>_{{<a href="ModelBase.html#idAttribute"><code>idAttribute</code></a>}}</code>.</p></td>
         </tr>
 
     
@@ -745,7 +766,7 @@ Book.where({id: 1}).fetch({withRelated: ['author']}).then(function(book) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line151">line 151</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line140">line 140</a>
     </li></ul></dd>
     
 
@@ -828,7 +849,7 @@ var User = bookshelf.Model.extend({
 
 });  </code></pre><p> The default key names in the joining table are the singular versions of the
  model table names, followed by <code>_id</code> /
- _{{<a href="Model.html#idAttribute"><code>idAttribute</code></a>}}. So in the above case, the
+ _{{<a href="ModelBase.html#idAttribute"><code>idAttribute</code></a>}}. So in the above case, the
  columns in the joining table
  would be <code>user_id</code>, <code>account_id</code>, and <code>access</code>, which is used as an
  example of how dynamic relations can be formed using different contexts.
@@ -961,7 +982,7 @@ var Patient = bookshelf.Model.extend({
 
             <td class="description last"><p>Foreign key in this model. By default, the <code>foreignKey</code> is assumed to
   be the singular form of the <code>Target</code> model's tableName, followed by <code>_id</code> /
-  <code>_{{idAttribute}}</code>.</p></td>
+  <code>_{{<a href="ModelBase.html#idAttribute"><code>idAttribute</code></a>}}</code>.</p></td>
         </tr>
 
     
@@ -1030,7 +1051,7 @@ var Patient = bookshelf.Model.extend({
 
             <td class="description last"><p>Foreign key in the <code>Target</code> model. By default, the <code>otherKey</code> is assumed to
   be the singular form of this model's tableName, followed by <code>_id</code> /
-  <code>_{{idAttribute}}</code>.</p></td>
+  <code>_{{<a href="ModelBase.html#idAttribute"><code>idAttribute</code></a>}}</code>.</p></td>
         </tr>
 
     
@@ -1071,7 +1092,7 @@ var Patient = bookshelf.Model.extend({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line194">line 194</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line183">line 183</a>
     </li></ul></dd>
     
 
@@ -1120,6 +1141,225 @@ var Patient = bookshelf.Model.extend({
 
     
 
+    <h4 class="name" id="clear"><span class="type-signature"></span>clear<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Clear all attributes on the model.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#clear">ModelBase#clear</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line294">line 294</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>This model.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="clone"><span class="type-signature"></span>clone<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns a new instance of the model with identical <code>attributes</code>, including any relations from the cloned
+model.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#clone">ModelBase#clone</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line353">line 353</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Cloned instance of this model.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="destroy"><span class="type-signature"></span>destroy<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
 
     
@@ -1127,7 +1367,7 @@ var Patient = bookshelf.Model.extend({
 
 
 <div class="description">
-    <p><code>destroy</code> performs a <code>delete</code> on the model, using the model's <a href="Model.html#idAttribute"><code>idAttribute</code></a> to constrain the query.</p>
+    <p><code>destroy</code> performs a <code>delete</code> on the model, using the model's <a href="ModelBase.html#idAttribute"><code>idAttribute</code></a> to constrain the query.</p>
 <p>A <code>&quot;destroying&quot;</code> event is triggered on the model before being
 destroyed. To prevent destroying the model (with validation, etc.), throwing an error
 inside one of these event listeners will stop destroying the model and
@@ -1299,7 +1539,7 @@ removal is completed.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line985">line 985</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line974">line 974</a>
     </li></ul></dd>
     
 
@@ -1320,6 +1560,142 @@ removal is completed.</p>
 
     <li>Model#event:destroying Fired after the `delete` operation.</li>
 </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="escape"><span class="type-signature"></span>escape<span class="signature">(attribute)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Get the HTML-escaped value of an attribute.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attribute</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The attribute to escape.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#escape">ModelBase#escape</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line228">line 228</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
 
 
 
@@ -1366,8 +1742,8 @@ with any specified <code>relations</code> named on the model. A
 single property, or an array of properties can be specified as a value for
 the <code>withRelated</code> property. The results of these relation queries will be
 loaded into a <code>relations</code> property on the model, may
-be retrieved with the <code>related</code> method, and will be
-serialized as properties on a <code>toJSON</code> call unless
+be retrieved with the <a href="Model.html#related"><code>related</code></a> method, and will be
+serialized as properties on a <a href="Model.html#toJSON"><code>toJSON</code></a> call unless
 <code>{shallow: true}</code> is passed.  </p>
 <pre class="prettyprint source"><code>var Book = bookshelf.Model.extend({
   tableName: 'books',
@@ -1638,7 +2014,7 @@ new Book({'ISBN-13': '9780440180296'}).fetch({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line524">line 524</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line513">line 513</a>
     </li></ul></dd>
     
 
@@ -1937,7 +2313,7 @@ the options to the <code>fetchAll</code> call.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line649">line 649</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line638">line 638</a>
     </li></ul></dd>
     
 
@@ -2016,6 +2392,661 @@ the options to the <code>fetchAll</code> call.</p>
     <dd>
         
 <span class="param-type">Promise.&lt;Collection></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="format"><span class="type-signature"></span>format<span class="signature">(attributes)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>The <code>format</code> method is used to modify the current state of the model before
+it is persisted to the database. The <code>attributes</code> passed are a shallow clone
+of the <a href="Model.html"><code>model</code></a>, and are only used for inserting/updating - the
+current values of the model are left intact.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attributes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The attributes to be converted.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#format">ModelBase#format</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line312">line 312</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Formatted attributes.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(attribute)</span><span class="type-signature"> &rarr; {mixed}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Get the current value of an attribute from the model.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attribute</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The name of the attribute to retrieve.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#get">ModelBase#get</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line77">line 77</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Attribute value.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">mixed</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>note.get("title")</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="has"><span class="type-signature"></span>has<span class="signature">(attribute)</span><span class="type-signature"> &rarr; {bool}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns <code>true</code> if the attribute contains a value that is not null or undefined.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attribute</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The attribute to check.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#has">ModelBase#has</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line239">line 239</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>True if <code>attribute</code> is set, otherwise null.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">bool</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="hasChanged"><span class="type-signature"></span>hasChanged<span class="signature">(attribute<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {bool}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns true if any <code>attribute</code> attribute has changed
+since the last <a href="Model.html#fetch"><code>fetch</code></a>, <a href="Model.html#save"><code>save</code></a>, or <a href="Model.html#destroy"><code>destroy</code></a>. If an attribute is passed, returns true only if that
+specific attribute has changed.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attribute</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#hasChanged">ModelBase#hasChanged</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line436">line 436</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p><code>true</code> if any attribute has changed. Or, if <code>attribute</code> was specified, true
+if it has changed.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">bool</span>
 
 
     </dd>
@@ -2135,7 +3166,7 @@ another table which match on this model's primary key.</p>
 
             <td class="description last"><p>ForeignKey in the <code>Target</code> model. By default, the foreignKey is assumed to
   be the singular form of this model's tableName, followed by <code>_id</code> /
-  <code>_{{idAttribute}}</code>.</p></td>
+  <code>_{{<a href="ModelBase.html#idAttribute"><code>idAttribute</code></a>}}</code>.</p></td>
         </tr>
 
     
@@ -2176,7 +3207,7 @@ another table which match on this model's primary key.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line129">line 129</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line118">line 118</a>
     </li></ul></dd>
     
 
@@ -2350,7 +3381,7 @@ new Patient({id: 1}).record().fetch().then(function(model) {
 
             <td class="description last"><p>ForeignKey in the <code>Target</code> model. By default, the <code>foreignKey</code> is assumed to
   be the singular form of this model's <a href="Model.html#tableName"><code>tableName</code></a>,
-  followed by <code>_id</code> / <code>_{{<a href="Model.html#idAttribute"><code>idAttribute</code></a>}}</code>.</p></td>
+  followed by <code>_id</code> / <code>_{{<a href="ModelBase.html#idAttribute"><code>idAttribute</code></a>}}</code>.</p></td>
         </tr>
 
     
@@ -2391,7 +3422,7 @@ new Patient({id: 1}).record().fetch().then(function(model) {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line86">line 86</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line75">line 75</a>
     </li></ul></dd>
     
 
@@ -2432,6 +3463,283 @@ new Patient({id: 1}).record().fetch().then(function(model) {
 </dl>
 
     
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="invert"><span class="type-signature"></span>invert<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#invert">ModelBase#invert</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line499">line 499</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="http://underscorejs.org/#invert">http://underscorejs.org/#invert</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="isNew"><span class="type-signature"></span>isNew<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Checks for the existence of an id to determine whether the model is
+considered &quot;new&quot;.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#isNew">ModelBase#isNew</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line148">line 148</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var modelA = new bookshelf.Model();
+modelA.isNew(); // true
+
+var modelB = new bookshelf.Model({id: 1});
+modelB.isNew(); // false</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="keys"><span class="type-signature"></span>keys<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#keys">ModelBase#keys</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line487">line 487</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="http://underscorejs.org/#keys">http://underscorejs.org/#keys</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2665,7 +3973,7 @@ eager loading.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line721">line 721</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line710">line 710</a>
     </li></ul></dd>
     
 
@@ -2968,7 +4276,7 @@ store/retrieve a different value in the <code>_type</code> column than the <code
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line349">line 349</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line338">line 338</a>
     </li></ul></dd>
     
 
@@ -3272,7 +4580,7 @@ If your argument is an array, it will be assumed to contain custom
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line298">line 298</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line287">line 287</a>
     </li></ul></dd>
     
 
@@ -3515,7 +4823,7 @@ of the <a href="Model.html#morphOne"><code>morphOne</code></a> or <a href="Model
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line401">line 401</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line390">line 390</a>
     </li></ul></dd>
     
 
@@ -3550,6 +4858,720 @@ of the <a href="Model.html#morphOne"><code>morphOne</code></a> or <a href="Model
     <dd>
         
 <span class="param-type"><a href="Model.html">Model</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="omit"><span class="type-signature"></span>omit<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#omit">ModelBase#omit</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line507">line 507</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="http://underscorejs.org/#omit">http://underscorejs.org/#omit</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="pairs"><span class="type-signature"></span>pairs<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#pairs">ModelBase#pairs</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line495">line 495</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="http://underscorejs.org/#pairs">http://underscorejs.org/#pairs</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="parse"><span class="type-signature"></span>parse<span class="signature">(response)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>The parse method is called whenever a <a href="Model.html"><code>model</code></a>'s data is returned
+in a <a href="Model.html#fetch"><code>fetch</code></a> call. The function is passed the raw database
+response object, and should return the <code>attributes</code> hash to be <a href="ModelBase.html#set"><code>set</code></a> on the model. The default
+implementation is a no-op, simply passing through the JSON response.
+Override this if you need to format the database responses - for example
+calling <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse">JSON.parse</a> on a text field containing JSON, or explicitly typecasting a
+boolean in a sqlite3 database response.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>response</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Hash of attributes to parse.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#parse">ModelBase#parse</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line271">line 271</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Parsed attributes.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// Example of a "parse" to convert snake_case to camelCase, using `underscore.string`
+model.parse = function(attrs) {
+  return _.reduce(attrs, function(memo, val, key) {
+    memo[_.str.camelize(key)] = val;
+    return memo;
+  }, {});
+};</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="pick"><span class="type-signature"></span>pick<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#pick">ModelBase#pick</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line503">line 503</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="http://underscorejs.org/#pick">http://underscorejs.org/#pick</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="previous"><span class="type-signature"></span>previous<span class="signature">(attribute)</span><span class="type-signature"> &rarr; {mixed}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Returns the this previous value of a changed <code>attribute</code>, or <code>undefined</code> if one had not been specified previously.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attribute</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The attribute to check</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#previous">ModelBase#previous</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line451">line 451</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The previous value</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">mixed</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="previousAttributes"><span class="type-signature"></span>previousAttributes<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Return a copy of the <a href="Model.html"><code>model</code></a>'s previous attributes from the
+model's last <a href="Model.html#fetch"><code>fetch</code></a>, <a href="Model.html#save"><code>save</code></a>, or <a href="Model.html#destroy"><code>destroy</code></a>. Useful for getting a diff between versions of a
+model, or getting back to a valid state after an error occurs.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#previousAttributes">ModelBase#previousAttributes</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line467">line 467</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The attributes as they were before the last change.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
 
 
     </dd>
@@ -3676,7 +5698,7 @@ returning the current model.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line1064">line 1064</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line1053">line 1053</a>
     </li></ul></dd>
     
 
@@ -3764,6 +5786,138 @@ returning the current model.</p>
 
     
 
+    <h4 class="name" id="related"><span class="type-signature"></span>related<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>|Collection|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>The <code>related</code> method returns a specified relation loaded on the relations
+hash on the model, or calls the associated relation method and adds it to
+the relations hash if one exists and has not yet been loaded.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#related">ModelBase#related</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line340">line 340</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The specified relation as defined by a
+  method on the model, or undefined if it does not exist.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Model.html">Model</a></span>
+|
+
+<span class="param-type">Collection</span>
+|
+
+<span class="param-type">undefined</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>new Photo({id: 1}).fetch({
+  withRelated: ['account']
+}).then(function(photo) {
+  if (photo) {
+    var account = photo.related('account');
+    if (account.id) {
+       return account.related('trips').fetch();
+    }
+  }
+});</code></pre>
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="resetQuery"><span class="type-signature"></span>resetQuery<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
 
     
@@ -3817,7 +5971,7 @@ returning the current model.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line1051">line 1051</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line1040">line 1040</a>
     </li></ul></dd>
     
 
@@ -3879,7 +6033,7 @@ returning the current model.</p>
 <div class="description">
     <p><code>save</code> is used to perform either an insert or update query using the
 model's set <code>attributes</code>.</p>
-<p>If the model <code>isNew</code>, any <code>defaults</code>
+<p>If the model <a href="ModelBase.html#isNew"><code>isNew</code></a>, any <code>defaults</code>
 will be set and an <code>insert</code> query will be performed. Otherwise it will
 <code>update</code> the record with a corresponding ID. This behaviour can be overriden
 with the <code>method</code> option.</p>
@@ -4331,7 +6485,7 @@ Model.forge({id: 5}).save('name', 'John Smith').then(function() { //...</code></
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line765">line 765</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line754">line 754</a>
     </li></ul></dd>
     
 
@@ -4411,6 +6565,615 @@ Model.forge({id: 5}).save('name', 'John Smith').then(function() { //...</code></
 
     
 
+    <h4 class="name" id="serialize"><span class="type-signature"></span>serialize<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Return a copy of the model's <code>attributes</code> for JSON
+stringification. If the <a href="Model.html"><code>model</code></a> has any relations defined, this
+will also call <a href="ModelBase.html"><code>ModelBase#toJSON</code></a> on each of the related
+objects, and include them on the object unless <code>{shallow: true}</code> is
+passed as an option.</p>
+<p><code>serialize</code> is called internally by <a href="ModelBase.html#toJSON"><code>toJSON</code></a>. Override
+this function if you want to customize its output.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>shallow</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">bool</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Exclude relations.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>omitPivot</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">bool</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Exclude pivot values.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#serialize">ModelBase#serialize</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line181">line 181</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Serialized model as a plain object.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>var artist = new bookshelf.Model({
+  firstName: "Wassily",
+  lastName: "Kandinsky"
+});
+
+artist.set({birthday: "December 16, 1866"});
+
+console.log(JSON.stringify(artist));
+// {firstName: "Wassily", lastName: "Kandinsky", birthday: "December 16, 1866"}</code></pre>
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="set"><span class="type-signature"></span>set<span class="signature">(attribute, value<span class="signature-attributes">opt</span>, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Set a hash of attributes (one or many) on the model.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attribute</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Attribute name, or hash of attribute names and values.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">mixed</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>If a string was provided for <code>attribute</code>, the value to be set.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>A hash of options.</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>unset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last"><p>Remove attributes instead of setting them.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#set">ModelBase#set</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line95">line 95</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>This model.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>customer.set({first_name: "Joe", last_name: "Customer"});
+customer.set("telephone", "555-555-1212");</code></pre>
+
+
+
+        
+            
+
+    
+
     <h4 class="name" id="through"><span class="type-signature"></span>through<span class="signature">(Interim, throughForeignKey<span class="signature-attributes">opt</span>, otherKey<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Collection}</span></h4>
 
     
@@ -4459,7 +7222,7 @@ var Paragraph = bookshelf.Model.extend({
     return this.belongsTo(Book).through(Chapter);
   }
 
-});</code></pre><p>The &quot;through&quot; table creates a pivot model, which it assigns to <code>model.pivot</code> after it is created. On <code>toJSON</code>, the pivot model is flattened to values prefixed with
+});</code></pre><p>The &quot;through&quot; table creates a pivot model, which it assigns to <code>model.pivot</code> after it is created. On <a href="Model.html#toJSON"><code>toJSON</code></a>, the pivot model is flattened to values prefixed with
 <code>_pivot_</code>.</p>
 </div>
 
@@ -4557,7 +7320,7 @@ var Paragraph = bookshelf.Model.extend({
 
             <td class="description last"><p>Foreign key in this model. By default, the <code>foreignKey</code> is assumed to
   be the singular form of the <code>Target</code> model's tableName, followed by <code>_id</code> /
-  <code>_{{idAttribute}}</code>.</p></td>
+  <code>_{{<a href="ModelBase.html#idAttribute"><code>idAttribute</code></a>}}</code>.</p></td>
         </tr>
 
     
@@ -4592,7 +7355,7 @@ var Paragraph = bookshelf.Model.extend({
 
             <td class="description last"><p>Foreign key in the <code>Interim</code> model. By default, the <code>otherKey</code> is assumed to
   be the singular form of this model's tableName, followed by <code>_id</code> /
-  <code>_{{idAttribute}}</code>.</p></td>
+  <code>_{{<a href="ModelBase.html#idAttribute"><code>idAttribute</code></a>}}</code>.</p></td>
         </tr>
 
     
@@ -4633,7 +7396,7 @@ var Paragraph = bookshelf.Model.extend({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line448">line 448</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line437">line 437</a>
     </li></ul></dd>
     
 
@@ -4682,16 +7445,250 @@ var Paragraph = bookshelf.Model.extend({
 
     
 
-    <h4 class="name" id="where"><span class="type-signature"></span>where<span class="signature">(Either)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
+    <h4 class="name" id="timestamp"><span class="type-signature"></span>timestamp<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
 
 
 
 <div class="description">
-    <p>The where method is used as convenience for the most common <a href="Model.html#query"><code>query</code></a> method, adding a where clause to the builder. Any
- additional knex methods may be accessed using <a href="Model.html#query"><code>query</code></a>.</p>
-<p> Accepts either key, value syntax, or a hash of attributes.</p>
+    <p>Sets the timestamp attributes on the model, if <code>hasTimestamps</code> is set to <code>true</code> or an array. Check if the model <a href="Model.html#isNew"><code>isNew</code></a> or if <code>{method: 'insert'}</code> is provided as an option and
+set the <code>created_at</code> and <code>updated_at</code> attributes to the current date if it
+is being inserted, and just the <code>updated_at</code> attribute if it's being updated.
+This method may be overriden to use different column names or types for the
+timestamps.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>method=</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">method</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Either <code>'insert'</code> or <code>'update'</code>. Specify what kind of save the attribute
+update is for.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#timestamp">ModelBase#timestamp</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line399">line 399</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A hash of timestamp attributes that were set.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="toJSON"><span class="type-signature"></span>toJSON<span class="signature">(Options)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Called automatically by <a href="https://developer.mozilla.org/en-US/docs/Glossary/JSON#toJSON()_method"><code>JSON.stringify</code></a>. To customize serialization, override <code>serialize</code>.</p>
 </div>
 
 
@@ -4727,7 +7724,389 @@ var Paragraph = bookshelf.Model.extend({
 
         <tr>
             
-                <td class="name"><code>Either</code></td>
+                <td class="name"><code>Options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">options</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>passed to <code>BaseModel#serialize</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#toJSON">ModelBase#toJSON</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line210">line 210</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="unset"><span class="type-signature"></span>unset<span class="signature">(attribute)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Remove an attribute from the model. <code>unset</code> is a noop if the attribute
+doesn't exist.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>attribute</code></td>
+            
+
+            <td class="type">
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Attribute to unset.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#unset">ModelBase#unset</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line285">line 285</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>This model.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Model.html">Model</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="values"><span class="type-signature"></span>values<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="ModelBase.html#values">ModelBase#values</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="lib_base_model.js.html">lib/base/model.js</a>, <a href="lib_base_model.js.html#line491">line 491</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="http://underscorejs.org/#values">http://underscorejs.org/#values</a></li>
+        </ul>
+    </dd>
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="where"><span class="type-signature"></span>where<span class="signature">(method)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>The where method is used as convenience for the most common <a href="Model.html#query"><code>query</code></a> method, adding a where clause to the builder. Any
+additional knex methods may be accessed using <a href="Model.html#query"><code>query</code></a>.</p>
+<p>Accepts either key, value syntax, or a hash of attributes.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>method</code></td>
             
 
             <td class="type">
@@ -4746,9 +8125,9 @@ var Paragraph = bookshelf.Model.extend({
 
             
 
-            <td class="description last"><p><code>key, [operator], value</code> syntax, or a hash of attributes to
-   match. Note that these must be formatted as they are in the database,
-   not how they are stored after <code>Model#parse</code>.</p></td>
+            <td class="description last"><p>Either <code>key, [operator], value</code> syntax, or a hash of attributes to
+  match. Note that these must be formatted as they are in the database,
+  not how they are stored after <a href="Model.html#parse"><code>Model#parse</code></a>.</p></td>
         </tr>
 
     
@@ -4789,7 +8168,7 @@ var Paragraph = bookshelf.Model.extend({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line1109">line 1109</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line1098">line 1098</a>
     </li></ul></dd>
     
 
@@ -4846,12 +8225,10 @@ var Paragraph = bookshelf.Model.extend({
     <h5>Example</h5>
     
     <pre class="prettyprint"><code>model.where('favorite_color', '&lt;>', 'green').fetch().then(function() { //...
-     // or
-     model.where('favorite_color', 'red').fetch().then(function() { //...
-     // or
-     model.where({favorite_color: 'red', shoe_size: 12}).then(function() { //...
-
- </code></pre>
+// or
+model.where('favorite_color', 'red').fetch().then(function() { //...
+// or
+model.where({favorite_color: 'red', shoe_size: 12}).then(function() { //...</code></pre>
 
 
 
@@ -5025,7 +8402,7 @@ var Paragraph = bookshelf.Model.extend({
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line955">line 955</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line944">line 944</a>
     </li></ul></dd>
     
 
@@ -5233,7 +8610,7 @@ exception from the handler will cancel the save operation.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line894">line 894</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line883">line 883</a>
     </li></ul></dd>
     
 
@@ -5440,7 +8817,7 @@ handler for async behaviour.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line1034">line 1034</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line1023">line 1023</a>
     </li></ul></dd>
     
 
@@ -5648,7 +9025,7 @@ will reject the promise and cancel the deletion.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line1011">line 1011</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line1000">line 1000</a>
     </li></ul></dd>
     
 
@@ -5854,7 +9231,7 @@ event handler for async behaviour.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line631">line 631</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line620">line 620</a>
     </li></ul></dd>
     
 
@@ -6060,7 +9437,7 @@ event handler for async behaviour.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line942">line 942</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line931">line 931</a>
     </li></ul></dd>
     
 
@@ -6268,7 +9645,7 @@ exception from the handler will cancel the save.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line879">line 879</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line868">line 868</a>
     </li></ul></dd>
     
 
@@ -6474,7 +9851,7 @@ exception from the handler will cancel the save.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line968">line 968</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line957">line 957</a>
     </li></ul></dd>
     
 
@@ -6682,7 +10059,7 @@ exception from the handler will cancel the save operation.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line909">line 909</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line898">line 898</a>
     </li></ul></dd>
     
 
@@ -6888,7 +10265,7 @@ may be returned from the event handler for async behaviour.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line706">line 706</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line695">line 695</a>
     </li></ul></dd>
     
 
@@ -7094,7 +10471,7 @@ may be returned from the event handler for async behaviour.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line693">line 693</a>
+        <a href="lib_model.js.html">lib/model.js</a>, <a href="lib_model.js.html#line682">line 682</a>
     </li></ul></dd>
     
 
@@ -7150,13 +10527,13 @@ may be returned from the event handler for async behaviour.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Bookshelf.html">Bookshelf</a></li></ul><h3>Classes</h3><ul><li><a href="Model.html">Model</a></li><li><a href="Model.NoRowsDeletedError.html">NoRowsDeletedError</a></li><li><a href="Model.NoRowsUpdated.html">NoRowsUpdated</a></li><li><a href="Model.NotFoundError.html">NotFoundError</a></li></ul><h3>Events</h3><ul><li><a href="Model.html#event:created">created</a></li><li><a href="Model.html#event:creating">creating</a></li><li><a href="Model.html#event:destroyed">destroyed</a></li><li><a href="Model.html#event:destroying">destroying</a></li><li><a href="Model.html#event:fetched">fetched</a></li><li><a href="Model.html#event:saved">saved</a></li><li><a href="Model.html#event:saving">saving</a></li><li><a href="Model.html#event:updated">updated</a></li><li><a href="Model.html#event:updating">updating</a></li><li><a href="Model.html#event:fetched:collection">fetched:collection</a></li><li><a href="Model.html#event:fetching:collection">fetching:collection</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Bookshelf.html">Bookshelf</a></li></ul><h3>Classes</h3><ul><li><a href="Model.html">Model</a></li><li><a href="Model.NoRowsDeletedError.html">NoRowsDeletedError</a></li><li><a href="Model.NoRowsUpdated.html">NoRowsUpdated</a></li><li><a href="Model.NotFoundError.html">NotFoundError</a></li><li><a href="ModelBase.html">ModelBase</a></li></ul><h3>Events</h3><ul><li><a href="Model.html#event:created">created</a></li><li><a href="Model.html#event:creating">creating</a></li><li><a href="Model.html#event:destroyed">destroyed</a></li><li><a href="Model.html#event:destroying">destroying</a></li><li><a href="Model.html#event:fetched">fetched</a></li><li><a href="Model.html#event:saved">saved</a></li><li><a href="Model.html#event:saving">saving</a></li><li><a href="Model.html#event:updated">updated</a></li><li><a href="Model.html#event:updating">updating</a></li><li><a href="Model.html#event:fetched:collection">fetched:collection</a></li><li><a href="Model.html#event:fetching:collection">fetching:collection</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.1</a> on Sun Jun 21 2015 16:03:42 GMT+1000 (AEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.1</a> on Sun Jun 21 2015 18:07:57 GMT+1000 (AEST)
 </footer>
 
 <script> prettyPrint(); </script>

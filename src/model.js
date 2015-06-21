@@ -12,6 +12,20 @@ var ModelBase      = require('./base/model');
 var Promise        = require('./base/promise');
 
 /**
+ *
+ * @class Model
+ * @extends ModelBase
+ * @inheritdoc
+ * @classdesc
+ *
+ * Models are simple objects representing individual database rows, specifying
+ * the tableName and any relations to other models. They can be extended with
+ * any domain-specific methods, which can handle components such as validations,
+ * computed properties, and access control.
+ *
+ * @constructor
+ * @description
+ *
  * When creating an instance of a model, you can pass in the initial values of
  * the attributes, which will be {@linkcode Model#set set} on the
  * model. If you define an {@linkcode initialize} function, it will be invoked
@@ -40,8 +54,6 @@ var Promise        = require('./base/promise');
  *     });
  *
  * @constructor
- * @extends ModelBase
- * @alias Model
  *
  * @param {Object}   attributes            Initial values for this model's attributes.
  * @param {Object=}  options               Hash of options.
@@ -57,29 +69,6 @@ var Promise        = require('./base/promise');
  *   
  */
 var BookshelfModel = ModelBase.extend({
-
-  /**
-   * A required property for any database usage, The
-   * {@linkcode Model#tableName tableName} property refers to the database
-   * table name the model will query against.
-   *
-   *     var Television = bookshelf.Model.extend({
-   *       tableName: 'televisions'
-   *     });
-   *
-   * @member {string} Model#tableName
-   */
-
-  /**
-   * This tells the model which attribute to expect as the unique identifier
-   * for each database row (typically an auto-incrementing primary key named
-   * `"id"`). Note that if you are using {@link Model#parse parse} and {@link
-   * Model#format format} (to have your model's attributes in `camelCase`,
-   * but your database's columns in `snake_case`, for example) this refers to
-   * the name returned by parse (`myId`), not the database column (`my_id`).
-   *
-   * @member {string} Model#idAttribute
-   */
 
   /**
    * The `hasOne` relation specifies that this table has exactly one of another
@@ -116,7 +105,7 @@ var BookshelfModel = ModelBase.extend({
    *
    *   ForeignKey in the `Target` model. By default, the `foreignKey` is assumed to
    *   be the singular form of this model's {@linkcode Model#tableName tableName},
-   *   followed by `_id` / `_{{{@link Model#idAttribute idAttribute}}}`.
+   *   followed by `_id` / `_{{{@link ModelBase#idAttribute idAttribute}}}`.
    *
    * @returns {Model}
    */
@@ -138,7 +127,7 @@ var BookshelfModel = ModelBase.extend({
    *
    *   ForeignKey in the `Target` model. By default, the foreignKey is assumed to
    *   be the singular form of this model's tableName, followed by `_id` /
-   *   `_{{idAttribute}}`.
+   *   `_{{{@link ModelBase#idAttribute idAttribute}}}`.
    *
    * @returns {Collection}
    */
@@ -181,7 +170,7 @@ var BookshelfModel = ModelBase.extend({
    *
    *   ForeignKey in this model. By default, the foreignKey is assumed to
    *   be the singular form of the `Target` model's tableName, followed by `_id` /
-   *   `_{{idAttribute}}`.
+   *   `_{{{@link ModelBase#idAttribute idAttribute}}}`.
    *
    * @returns {Model}
    */
@@ -220,7 +209,7 @@ var BookshelfModel = ModelBase.extend({
    *
    *  The default key names in the joining table are the singular versions of the
    *  model table names, followed by `_id` /
-   *  _{{{@link Model#idAttribute idAttribute}}}. So in the above case, the
+   *  _{{{@link ModelBase#idAttribute idAttribute}}}. So in the above case, the
    *  columns in the joining table
    *  would be `user_id`, `account_id`, and `access`, which is used as an
    *  example of how dynamic relations can be formed using different contexts.
@@ -272,7 +261,7 @@ var BookshelfModel = ModelBase.extend({
    *
    *   Foreign key in this model. By default, the `foreignKey` is assumed to
    *   be the singular form of the `Target` model's tableName, followed by `_id` /
-   *   `_{{idAttribute}}`.
+   *   `_{{{@link ModelBase#idAttribute idAttribute}}}`.
    *
    * @param {string=} table
    *
@@ -283,7 +272,7 @@ var BookshelfModel = ModelBase.extend({
    *
    *   Foreign key in the `Target` model. By default, the `otherKey` is assumed to
    *   be the singular form of this model's tableName, followed by `_id` /
-   *   `_{{idAttribute}}`.
+   *   `_{{{@link ModelBase#idAttribute idAttribute}}}`.
    *
    * @returns {Collection}
    */
@@ -505,13 +494,13 @@ var BookshelfModel = ModelBase.extend({
    *
    *   Foreign key in this model. By default, the `foreignKey` is assumed to
    *   be the singular form of the `Target` model's tableName, followed by `_id` /
-   *   `_{{idAttribute}}`.
+   *   `_{{{@link ModelBase#idAttribute idAttribute}}}`.
    *
    * @param {string=} otherKey
    *
    *   Foreign key in the `Interim` model. By default, the `otherKey` is assumed to
    *   be the singular form of this model's tableName, followed by `_id` /
-   *   `_{{idAttribute}}`.
+   *   `_{{{@link ModelBase#idAttribute idAttribute}}}`.
    *
    * @returns {Collection}
    */
@@ -774,7 +763,7 @@ var BookshelfModel = ModelBase.extend({
    * `save` is used to perform either an insert or update query using the
    * model's set {@link Model#attributes attributes}.
    *
-   * If the model {@link Model#isNew isNew}, any {@link Model#defaults defaults}
+   * If the model {@link ModelBase#isNew isNew}, any {@link Model#defaults defaults}
    * will be set and an `insert` query will be performed. Otherwise it will
    * `update` the record with a corresponding ID. This behaviour can be overriden
    * with the `method` option.
@@ -997,7 +986,7 @@ var BookshelfModel = ModelBase.extend({
 
   /**
    * `destroy` performs a `delete` on the model, using the model's {@link
-   * Model#idAttribute idAttribute} to constrain the query.
+   * ModelBase#idAttribute idAttribute} to constrain the query.
    *
    * A {@link Model#destroying "destroying"} event is triggered on the model before being
    * destroyed. To prevent destroying the model (with validation, etc.), throwing an error
@@ -1120,30 +1109,30 @@ var BookshelfModel = ModelBase.extend({
   },
 
   /**
-   *  The where method is used as convenience for the most common {@link
-   *  Model#query query} method, adding a where clause to the builder. Any
-   *  additional knex methods may be accessed using {@link Model#query query}.
+   * The where method is used as convenience for the most common {@link
+   * Model#query query} method, adding a where clause to the builder. Any
+   * additional knex methods may be accessed using {@link Model#query query}.
    *
-   *  Accepts either key, value syntax, or a hash of attributes.
+   * Accepts either key, value syntax, or a hash of attributes.
    *
-   *  @example
+   * @example
    *
-   *      model.where('favorite_color', '<>', 'green').fetch().then(function() { //...
-   *      // or
-   *      model.where('favorite_color', 'red').fetch().then(function() { //...
-   *      // or
-   *      model.where({favorite_color: 'red', shoe_size: 12}).then(function() { //...
+   * model.where('favorite_color', '<>', 'green').fetch().then(function() { //...
+   * // or
+   * model.where('favorite_color', 'red').fetch().then(function() { //...
+   * // or
+   * model.where({favorite_color: 'red', shoe_size: 12}).then(function() { //...
    *
-   *  @method Model#where
-   *  @param {Object|...string}
+   * @method Model#where
+   * @param {Object|...string} method
    *
-   *    Either `key, [operator], value` syntax, or a hash of attributes to
-   *    match. Note that these must be formatted as they are in the database,
-   *    not how they are stored after {@link Model#parse}.
+   *   Either `key, [operator], value` syntax, or a hash of attributes to
+   *   match. Note that these must be formatted as they are in the database,
+   *   not how they are stored after {@link Model#parse}.
    *
-   *  @returns {Model} Self, this method is chainable.
+   * @returns {Model} Self, this method is chainable.
    *
-   *  @see Model#query
+   * @see Model#query
    */
   where: function() {
     var args = _.toArray(arguments);
