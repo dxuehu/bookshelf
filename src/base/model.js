@@ -212,7 +212,7 @@ ModelBase.prototype.toJSON = function(options) {
 /**
  * @method
  * @private
- * @description Returns the string representation of the object.
+ * @returns String representation of the object.
  */
 ModelBase.prototype.toString = function() {
   return '[Object Model]';
@@ -222,6 +222,7 @@ ModelBase.prototype.toString = function() {
  * @method
  * @description Get the HTML-escaped value of an attribute.
  * @param {string} attribute The attribute to escape.
+ * @returns {string} HTML-escaped value of an attribute.
  */
 ModelBase.prototype.escape = function(key) {
   return _.escape(this.get(key));
